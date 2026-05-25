@@ -13,35 +13,25 @@ resource "helm_release" "metallb" {
   chart      = "metallb"
   version    = "0.14.5"
   namespace  = "metallb-system"
-}
 
-# Inject the IP Pool specifications into the cluster API
-resource "kubernetes_manifest" "metallb_ip_pool" {
-  depends_on = [helm_release.metallb]
-  manifest = {
-    "apiVersion" = "metallb.io/v1beta1"
-    "kind"       = "IPAddressPool"
-    "metadata" = {
-      "name"      = "local-ip-pool"
-      "namespace" = "metallb-system"
-    }
-    "spec" = {
-      "addresses" = var.metallb_ip_range
-    }
-  }
-}
-
-# Instruct speakers to announce presence via Layer-2 Gratuitous ARP
-resource "kubernetes_manifest" "metallb_l2_advertisement" {
-  depends_on = [kubernetes_manifest.metallb_ip_pool]
-  manifest = {
-    "apiVersion" = "metallb.io/v1beta1"
-    "kind"       = "L2Advertisement"
-    "metadata" = {
-      "name"      = "local-l2-adv"
-      "namespace" = "metallb-system"
-    }
-  }
+  # Inject Layer-2 Pool allocations directly into the chart configurations
+  values = [
+    yamlencode({
+      ipAddressPools = [
+        {
+          name       = "local-ip-pool"
+          addresses  = var.metallb_ip_range
+          autoAssign = true
+        }
+      ]
+      l2Advertisements = [
+        {
+          name           = "local-l2-adv"
+          ipAddressPools = ["local-ip-pool"]
+        }
+      ]
+    })
+  ]
 }
 
 # Deploy foundational Istio CRDs and Ingress control plane
@@ -72,7 +62,7 @@ resource "helm_release" "istio_ingress" {
   namespace  = "istio-system"
 }
 
-# Bare minimum infra compliance namespace for application isolation & mesh activation
+# Isolated infrastructure compliance namespace with automatic proxy mesh hooks
 resource "kubernetes_namespace" "app_space" {
   metadata {
     name = var.app_namespace
