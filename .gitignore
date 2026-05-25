@@ -1,0 +1,19 @@
+# Local directory paths (Provider binaries and module caches)
+.terraform/
+
+# Local state management infrastructure (Contains plain-text metadata)
+*.tfstate
+*.tfstate.backup
+
+# Execution crash registers
+crash.log
+*.changelog.to-be-deleted
+
+# Sensitive variable configurations (Isolate local overrides)
+*.tfvars
+*.tfvars.json
+
+# Ignore local system tracking files
+.DS_Store
+.idea/
+.vscode/
