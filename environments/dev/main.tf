@@ -6,9 +6,14 @@ variable "kubeconfig_path" {
   type = string
 }
 
+variable "app_namespace" {
+  type = string
+}
+
 module "dev_cluster_ingress" {
   source           = "../../modules/cluster_ingress_base"
   metallb_ip_range = var.metallb_ip_range
+  app_namespace    = var.app_namespace
 
   providers = {
     kubernetes = kubernetes
