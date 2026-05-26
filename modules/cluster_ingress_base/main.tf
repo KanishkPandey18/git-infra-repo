@@ -34,10 +34,10 @@ resource "helm_release" "metallb" {
   ]
 }
 
-# Deploy foundational Istio CRDs and Ingress control plane
+# Deploy official foundational Istio CRDs and Ingress control plane
 resource "helm_release" "istio_base" {
   name             = "istio-base"
-  repository       = "https://istio-release.elasticbeanstalk.com/charts"
+  repository       = "https://istio-release.storage.googleapis.com/charts"
   chart            = "base"
   version          = "1.20.0"
   namespace        = "istio-system"
@@ -47,7 +47,7 @@ resource "helm_release" "istio_base" {
 resource "helm_release" "istiod" {
   depends_on = [helm_release.istio_base]
   name       = "istiod"
-  repository = "https://istio-release.elasticbeanstalk.com/charts"
+  repository = "https://istio-release.storage.googleapis.com/charts"
   chart      = "istiod"
   version    = "1.20.0"
   namespace  = "istio-system"
@@ -56,10 +56,14 @@ resource "helm_release" "istiod" {
 resource "helm_release" "istio_ingress" {
   depends_on = [helm_release.istiod]
   name       = "istio-ingressgateway"
-  repository = "https://istio-release.elasticbeanstalk.com/charts"
+  repository = "https://istio-release.storage.googleapis.com/charts"
   chart      = "gateway"
   version    = "1.20.0"
   namespace  = "istio-system"
+  
+  # Crucial: Instructs Terraform to pass the specs and finish immediately
+  # without waiting for the physical Proxmox network bridge to assign an IP
+  wait       = false
 }
 
 # Isolated infrastructure compliance namespace with automatic proxy mesh hooks
