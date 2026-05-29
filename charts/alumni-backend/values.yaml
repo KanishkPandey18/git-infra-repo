@@ -9,7 +9,15 @@ service:
 
 env:
   NODE_ENV: "production"
-  KEYCLOAK_SERVER_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
+  # KEYCLOAK_SERVER_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
+  # This is the INTERNAL cluster URL used by the backend to fetch the public keys (jwksUri)
+  KEYCLOAK_JWKS_URI: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080/realms/application/protocol/openid-connect/certs"
   KEYCLOAK_REALM: "alumni-realm"
   KEYCLOAK_CLIENT_ID: "backend-client"
+  KEYCLOAK_ISSUER: "http://192.168.41.88/auth/realms/application"
+  NOTIFICATION_SERVICE_URL: "http://alumni-notification-service.default.svc.cluster.local:3000"
+  KEYCLOAK_INTERNAL_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
   secretName: "alumni-secrets"
+  KEYCLOAK_ADMIN: "admin" 
+  KEYCLOAK_ADMIN_PASSWORD: "admin"
+  

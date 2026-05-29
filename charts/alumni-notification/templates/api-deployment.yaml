@@ -22,8 +22,8 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
           env:
-            - name: KAFKA_BROKERS
-              value: {{ .Values.env.kafkaBrokers | quote }}
+            - name: KAFKA_BROKER
+              value: {{ .Values.env.KAFKA_BROKER | quote }}
           resources:
             limits:
               cpu: 500m

@@ -8,5 +8,6 @@ service:
   targetPort: 3000
 
 env:
-  kafkaBrokers: "alumni-kafka:9092"
+  # kafkaBrokers: "alumni-kafka:9092"
+  KAFKA_BROKER: "kafka-service.default.svc.cluster.local:9092"
   secretName: "alumni-secrets"
