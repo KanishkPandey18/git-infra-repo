@@ -1,0 +1,15 @@
+image:
+  repository: avitheg/alumni-backend
+  pullPolicy: Always
+  tag: "v4"
+
+service:
+  port: 8000
+  targetPort: 8000
+
+env:
+  NODE_ENV: "production"
+  KEYCLOAK_SERVER_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
+  KEYCLOAK_REALM: "alumni-realm"
+  KEYCLOAK_CLIENT_ID: "backend-client"
+  secretName: "alumni-secrets"

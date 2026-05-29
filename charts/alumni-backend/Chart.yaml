@@ -1,0 +1,6 @@
+apiVersion: v2
+name: alumni-backend
+description: A production-ready Helm chart for the core Alumni Application Express Backend API
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

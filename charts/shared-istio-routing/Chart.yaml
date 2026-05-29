@@ -1,0 +1,5 @@
+apiVersion: v2
+name: shared-istio-routing
+description: Global Istio Gateway and VirtualService for the Alumni Portal
+type: application
+version: 0.1.0

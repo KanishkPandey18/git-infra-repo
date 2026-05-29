@@ -1,19 +1,42 @@
+# ========================
+# Kubernetes & Helm (App Deployment)
+# ========================
+# STRICTLY block manual secrets from being committed
+k8s-manual-setup/
+
+# Helm packaged charts and local dependencies
+**/*.tgz
+charts/**/charts/
+charts/**/tmp/
+
+# ========================
+# Terraform (Infrastructure)
+# ========================
 # Local directory paths (Provider binaries and module caches)
 .terraform/
 
 # Local state management infrastructure (Contains plain-text metadata)
 *.tfstate
 *.tfstate.backup
+*.tfstate.*
 
 # Execution crash registers
 crash.log
 *.changelog.to-be-deleted
+crash.*.log
 
 # Sensitive variable configurations (Isolate local overrides)
 *.tfvars
 *.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
 
-# Ignore local system tracking files
+# ========================
+# IDEs and OS Artifacts
+# ========================
 .DS_Store
+Thumbs.db
 .idea/
 .vscode/

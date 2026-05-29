@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-incident-worker
+  labels:
+    app: notification-incident-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-incident-worker
+  template:
+    metadata:
+      labels:
+        app: notification-incident-worker
+    spec:
+      containers:
+        - name: incident-worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node", "workers/incidentWorker.js"]
+          env:
+            - name: KAFKA_BROKERS
+              value: {{ .Values.env.kafkaBrokers | quote }}
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi

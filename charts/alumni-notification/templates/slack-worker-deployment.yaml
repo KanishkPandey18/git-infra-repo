@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-slack-worker
+  labels:
+    app: notification-slack-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-slack-worker
+  template:
+    metadata:
+      labels:
+        app: notification-slack-worker
+    spec:
+      containers:
+        - name: slack-worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node", "workers/slackWorker.js"]
+          env:
+            - name: KAFKA_BROKERS
+              value: {{ .Values.env.kafkaBrokers | quote }}
+            - name: SLACK_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: SLACK_WEBHOOK_URL
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
