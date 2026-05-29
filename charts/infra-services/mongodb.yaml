@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb
-  namespace: alumni-dev-portal
+  namespace: alumni-portal-dev
 spec:
   serviceName: "mongo-service"
   replicas: 1
@@ -32,6 +32,7 @@ spec:
       name: mongo-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "local-path"
       resources: { requests: { storage: 5Gi } }
 ---
 apiVersion: v1

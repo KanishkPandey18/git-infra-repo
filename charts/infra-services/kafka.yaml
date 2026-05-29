@@ -2,7 +2,7 @@ apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: alumni-kafka
-  namespace: alumni-dev-portal
+  namespace: alumni-portal-dev
 spec:
   kafka:
     version: 3.7.0

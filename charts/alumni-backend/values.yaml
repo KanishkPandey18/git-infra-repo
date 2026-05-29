@@ -20,4 +20,5 @@ env:
   secretName: "alumni-secrets"
   KEYCLOAK_ADMIN: "admin" 
   KEYCLOAK_ADMIN_PASSWORD: "admin"
+  MONGO_URI: "mongodb://admin:adminpassword@mongo-service.alumni-dev-portal.svc.cluster.local:27017/alumni?authSource=admin"
   
