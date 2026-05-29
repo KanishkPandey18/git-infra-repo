@@ -20,8 +20,8 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["node", "workers/incidentWorker.js"]
           env:
-            - name: KAFKA_BROKERS
-              value: {{ .Values.env.kafkaBrokers | quote }}
+            - name: KAFKA_BROKER
+              value: {{ .Values.env.KAFKA_BROKER | quote }}
           resources:
             limits:
               cpu: 500m

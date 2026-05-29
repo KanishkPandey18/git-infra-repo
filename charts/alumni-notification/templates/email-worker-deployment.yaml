@@ -20,8 +20,8 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["node", "workers/emailWorker.js"]
           env:
-            - name: KAFKA_BROKERS
-              value: {{ .Values.env.kafkaBrokers | quote }}
+            - name: KAFKA_BROKER
+              value: {{ .Values.env.KAFKA_BROKER | quote }}
             - name: RESEND_API_KEY
               valueFrom:
                 secretKeyRef:
