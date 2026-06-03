@@ -1,7 +1,11 @@
 image:
   repository: 192.168.41.90:8082/alumni-backend
   pullPolicy: Always
+<<<<<<< HEAD
   tag: "v5"
+=======
+  tag: "v14"
+>>>>>>> 129ee3f979f1616d97305aa36004e2cf688acba1
 
 service:
   port: 8000
@@ -13,12 +17,20 @@ env:
   # This is the INTERNAL cluster URL used by the backend to fetch the public keys (jwksUri)
   # FIX 1: Add the /auth path so the backend can find the public keys : 30/05
   KEYCLOAK_JWKS_URI: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080/auth/realms/application/protocol/openid-connect/certs"
+<<<<<<< HEAD
  
+=======
+  
+>>>>>>> 129ee3f979f1616d97305aa36004e2cf688acba1
   KEYCLOAK_REALM: "alumni-realm"
   KEYCLOAK_CLIENT_ID: "backend-client"
   # FIX 2: Change http to https so it trusts your secure Keycloak tokens: 30/05
   KEYCLOAK_ISSUER: "https://192.168.41.88/auth/realms/application"
+<<<<<<< HEAD
   #FIX 3: changing the service name and namespace : alumni-portal-dev
+=======
+  #FIX 3
+>>>>>>> 129ee3f979f1616d97305aa36004e2cf688acba1
   NOTIFICATION_SERVICE_URL: "http://alumni-notification-api-service.alumni-portal-dev.svc.cluster.local:3000"
   KEYCLOAK_INTERNAL_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
   secretName: "alumni-secrets"

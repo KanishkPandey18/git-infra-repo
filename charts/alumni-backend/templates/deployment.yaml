@@ -30,6 +30,14 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.env.secretName }}
                   key: MONGO_URI
+            # --- The missing variables --- 30/05
+            - name: KEYCLOAK_JWKS_URI
+              value: {{ .Values.env.KEYCLOAK_JWKS_URI | quote }}
+            - name: KEYCLOAK_ISSUER
+              value: {{ .Values.env.KEYCLOAK_ISSUER | quote }}
+            - name: NOTIFICATION_SERVICE_URL
+              value: {{ .Values.env.NOTIFICATION_SERVICE_URL | quote }}
+            # -----------------------------
             - name: KEYCLOAK_SERVER_URL
               value: {{ .Values.env.KEYCLOAK_SERVER_URL | quote }}
             - name: KEYCLOAK_REALM
