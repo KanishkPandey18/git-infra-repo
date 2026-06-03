@@ -1,7 +1,7 @@
 image:
-  repository: avitheg/alumni-backend
+  repository: 192.168.41.90:8082/alumni-backend
   pullPolicy: Always
-  tag: "v4"
+  tag: "v5"
 
 service:
   port: 8000
@@ -11,14 +11,17 @@ env:
   NODE_ENV: "production"
   # KEYCLOAK_SERVER_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
   # This is the INTERNAL cluster URL used by the backend to fetch the public keys (jwksUri)
-  KEYCLOAK_JWKS_URI: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080/realms/application/protocol/openid-connect/certs"
+  # FIX 1: Add the /auth path so the backend can find the public keys : 30/05
+  KEYCLOAK_JWKS_URI: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080/auth/realms/application/protocol/openid-connect/certs"
+ 
   KEYCLOAK_REALM: "alumni-realm"
   KEYCLOAK_CLIENT_ID: "backend-client"
-  KEYCLOAK_ISSUER: "http://192.168.41.88/auth/realms/application"
-  NOTIFICATION_SERVICE_URL: "http://alumni-notification-service.default.svc.cluster.local:3000"
+  # FIX 2: Change http to https so it trusts your secure Keycloak tokens: 30/05
+  KEYCLOAK_ISSUER: "https://192.168.41.88/auth/realms/application"
+  #FIX 3: changing the service name and namespace : alumni-portal-dev
+  NOTIFICATION_SERVICE_URL: "http://alumni-notification-api-service.alumni-portal-dev.svc.cluster.local:3000"
   KEYCLOAK_INTERNAL_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
   secretName: "alumni-secrets"
-  KEYCLOAK_ADMIN: "admin" 
+  KEYCLOAK_ADMIN: "admin"
   KEYCLOAK_ADMIN_PASSWORD: "admin"
   MONGO_URI: "mongodb://admin:adminpassword@mongo-service.alumni-dev-portal.svc.cluster.local:27017/alumni?authSource=admin"
-  
