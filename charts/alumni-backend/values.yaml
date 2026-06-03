@@ -14,7 +14,7 @@ env:
   # FIX 1: Add the /auth path so the backend can find the public keys : 30/05
   KEYCLOAK_JWKS_URI: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080/auth/realms/application/protocol/openid-connect/certs"
   
-  KEYCLOAK_REALM: "alumni-realm"
+  KEYCLOAK_REALM: "application"
   KEYCLOAK_CLIENT_ID: "backend-client"
   # FIX 2: Change http to https so it trusts your secure Keycloak tokens: 30/05
   KEYCLOAK_ISSUER: "https://192.168.41.88/auth/realms/application"
@@ -24,5 +24,5 @@ env:
   secretName: "alumni-secrets"
   KEYCLOAK_ADMIN: "admin" 
   KEYCLOAK_ADMIN_PASSWORD: "admin"
-  MONGO_URI: "mongodb://admin:adminpassword@mongo-service.alumni-dev-portal.svc.cluster.local:27017/alumni?authSource=admin"
+  MONGO_URI: "mongodb://admin:adminpassword@mongo-service.alumni-portal-dev.svc.cluster.local:27017/alumni?authSource=admin"
   
