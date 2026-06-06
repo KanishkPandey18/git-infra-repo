@@ -41,7 +41,7 @@ spec:
           value: "PLAINTEXT://:9092,CONTROLLER://:9093"
         # 🟢 UPDATED: Points exactly to the alumni-portal-dev namespace
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: "PLAINTEXT://kafka.alumni-portal-dev.svc.cluster.local:9092"
+          value: "PLAINTEXT://kafka:9092"
         - name: KAFKA_CONTROLLER_LISTENER_NAMES
           value: "CONTROLLER"
         - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP

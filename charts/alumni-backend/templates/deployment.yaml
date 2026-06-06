@@ -25,25 +25,25 @@ spec:
               value: {{ .Values.env.NODE_ENV | quote }}
             - name: PORT
               value: {{ .Values.service.targetPort | quote }}
+            
+            # --- Dynamic Cluster Routing URLs ---
             - name: MONGO_URI
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.env.secretName }}
-                  key: MONGO_URI
-            # --- The missing variables --- 30/05
+              value: "mongodb://admin:adminpassword@mongo-service.{{ .Release.Namespace }}.svc.cluster.local:27017/alumni?authSource=admin"
             - name: KEYCLOAK_JWKS_URI
-              value: {{ .Values.env.KEYCLOAK_JWKS_URI | quote }}
+              value: "http://keycloak-service.{{ .Release.Namespace }}.svc.cluster.local:8080/auth/realms/application/protocol/openid-connect/certs"
+            - name: NOTIFICATION_SERVICE_URL
+              value: "http://alumni-notification-api-service.{{ .Release.Namespace }}.svc.cluster.local:3000"
+            - name: KEYCLOAK_INTERNAL_URL
+              value: "http://keycloak-service.{{ .Release.Namespace }}.svc.cluster.local:8080"
+            
+            # --- Standard Keycloak Configurations ---
             - name: KEYCLOAK_ISSUER
               value: {{ .Values.env.KEYCLOAK_ISSUER | quote }}
-            - name: NOTIFICATION_SERVICE_URL
-              value: {{ .Values.env.NOTIFICATION_SERVICE_URL | quote }}
-            # -----------------------------
-            - name: KEYCLOAK_SERVER_URL
-              value: {{ .Values.env.KEYCLOAK_SERVER_URL | quote }}
             - name: KEYCLOAK_REALM
               value: {{ .Values.env.KEYCLOAK_REALM | quote }}
             - name: KEYCLOAK_CLIENT_ID
               value: {{ .Values.env.KEYCLOAK_CLIENT_ID | quote }}
+              
           resources:
             limits:
               cpu: 1000m

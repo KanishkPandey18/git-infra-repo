@@ -20,8 +20,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["node", "workers/incidentWorker.js"]
           env:
+            # --- Dynamic Cluster Routing URL ---
             - name: KAFKA_BROKER
-              value: {{ .Values.env.KAFKA_BROKER | quote }}
+              value: "kafka.{{ .Release.Namespace }}.svc.cluster.local:9092"
           resources:
             limits:
               cpu: 500m
