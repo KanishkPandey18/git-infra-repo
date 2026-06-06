@@ -3,7 +3,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kafka
-  namespace: alumni-portal-dev
 spec:
   selector:
     app: kafka
@@ -16,7 +15,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka-deployment
-  namespace: alumni-portal-dev
 spec:
   replicas: 1
   selector:
@@ -41,7 +39,7 @@ spec:
           value: "PLAINTEXT://:9092,CONTROLLER://:9093"
         # 🟢 UPDATED: Points exactly to the alumni-portal-dev namespace
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: "PLAINTEXT://kafka.alumni-portal-dev.svc.cluster.local:9092"
+          value: "PLAINTEXT://kafka:9092"
         - name: KAFKA_CONTROLLER_LISTENER_NAMES
           value: "CONTROLLER"
         - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP

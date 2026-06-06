@@ -9,19 +9,20 @@ service:
 
 env:
   NODE_ENV: "production"
-  # KEYCLOAK_SERVER_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
-  # This is the INTERNAL cluster URL used by the backend to fetch the public keys (jwksUri)
-  # FIX 1: Add the /auth path so the backend can find the public keys : 30/05
-  KEYCLOAK_JWKS_URI: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080/auth/realms/application/protocol/openid-connect/certs"
+  # Cleaned internal DNS references
+  KEYCLOAK_JWKS_URI: "http://keycloak-service:8080/auth/realms/application/protocol/openid-connect/certs"
+  KEYCLOAK_INTERNAL_URL: "http://keycloak-service:8080"
+  NOTIFICATION_SERVICE_URL: "http://alumni-notification-api-service:3000"
+  MONGO_URI: "mongodb://admin:adminpassword@mongo-service:27017/alumni?authSource=admin"
+  
   KEYCLOAK_REALM: "application"
   KEYCLOAK_CLIENT_ID: "backend-client"
-  # FIX 2: Change http to https so it trusts your secure Keycloak tokens: 30/05
-  KEYCLOAK_ISSUER: "https://192.168.41.88/auth/realms/application"
-  #FIX 3: changing the service name and namespace : alumni-portal-dev
-  NOTIFICATION_SERVICE_URL: "http://alumni-notification-api-service.alumni-portal-dev.svc.cluster.local:3000"
-  KEYCLOAK_INTERNAL_URL: "http://keycloak-service.alumni-portal-dev.svc.cluster.local:8080"
   secretName: "alumni-secrets"
   KEYCLOAK_ADMIN: "admin"
   KEYCLOAK_ADMIN_PASSWORD: "admin"
-  MONGO_URI: "mongodb://admin:adminpassword@mongo-service.alumni-portal-dev.svc.cluster.local:27017/alumni?authSource=admin"
+
+  # NOTE ON THIS ISSUER URL:
+  # This must remain the PUBLIC URL that your frontend uses. 
+  # In production, change this IP to your actual domain name (e.g., https://alumni.jecrc.xyz/auth/realms/application)
+  KEYCLOAK_ISSUER: "https://192.168.41.88/auth/realms/application"
   

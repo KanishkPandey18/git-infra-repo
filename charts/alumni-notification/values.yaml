@@ -9,5 +9,5 @@ service:
 
 env:
   # kafkaBrokers: "alumni-kafka:9092"
-  KAFKA_BROKER: "kafka.alumni-portal-dev.svc.cluster.local:9092"
+  KAFKA_BROKER: "kafka:9092"
   secretName: "alumni-secrets"
