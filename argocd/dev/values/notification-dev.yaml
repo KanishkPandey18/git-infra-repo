@@ -1,0 +1,6 @@
+image:
+  tag: "v2"
+
+env:
+  # In your prod values file, this will dynamically change to alumni-portal-prod
+  KAFKA_BROKER: "kafka.alumni-portal-dev.svc.cluster.local:9092"

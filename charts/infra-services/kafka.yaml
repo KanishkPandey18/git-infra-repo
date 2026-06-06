@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kafka
-  namespace: alumni-portal-dev
+  
 spec:
   selector:
     app: kafka
@@ -16,7 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kafka-deployment
-  namespace: alumni-portal-dev
+  
 spec:
   replicas: 1
   selector:

@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alumni-routing-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/kanishkpandey18/git-infra-repo.git'
+    targetRevision: main
+    path: charts/shared-istio-routing
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: alumni-portal-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
