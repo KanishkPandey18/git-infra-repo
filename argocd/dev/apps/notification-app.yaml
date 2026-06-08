@@ -13,7 +13,7 @@ spec:
       valueFiles:
         - ../../argocd/dev/values/notification-dev.yaml
   destination:
-    server: 'https://kubernetes.default.svc'
+    name: dev-cluster
     namespace: alumni-portal-dev
   syncPolicy:
     automated:

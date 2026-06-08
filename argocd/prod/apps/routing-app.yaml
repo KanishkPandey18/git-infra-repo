@@ -11,7 +11,7 @@ spec:
     path: charts/shared-istio-routing
   destination:
     # This targets your Production Spoke cluster registered in ArgoCD
-    name: 'prod-rke2-cluster'
+    name: prod-cluster
     namespace: alumni-portal-prod
   syncPolicy:
     automated:

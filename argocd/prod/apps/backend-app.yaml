@@ -14,7 +14,7 @@ spec:
         - ../../argocd/prod/values/backend-prod.yaml
   destination:
     # This targets the Prod Spoke cluster you registered in ArgoCD CLI
-    name: 'prod-rke2-cluster' 
+    name: prod-cluster
     namespace: alumni-portal-prod
   syncPolicy:
     automated:

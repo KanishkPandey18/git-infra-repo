@@ -13,7 +13,7 @@ spec:
       valueFiles:
         - ../../argocd/prod/values/frontend-prod.yaml
   destination:
-    name: 'prod-rke2-cluster'
+    name: prod-cluster
     namespace: alumni-portal-prod
   syncPolicy:
     automated:
