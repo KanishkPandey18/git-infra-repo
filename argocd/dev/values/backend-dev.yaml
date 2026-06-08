@@ -1,6 +1,5 @@
 image:
-  repository: "avitheg/alumni-backend"
-  tag: "latest-dev" # Your Jenkins pipeline will update this
+  tag: "v5" # 
 
 env:
   NODE_ENV: "development"
