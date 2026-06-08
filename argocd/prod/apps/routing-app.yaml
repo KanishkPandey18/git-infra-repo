@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alumni-routing-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/kanishkpandey18/git-infra-repo.git'
+    targetRevision: main
+    path: charts/shared-istio-routing
+  destination:
+    # This targets your Production Spoke cluster registered in ArgoCD
+    name: 'prod-rke2-cluster'
+    namespace: alumni-portal-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

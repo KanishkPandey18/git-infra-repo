@@ -10,7 +10,8 @@ spec:
     targetRevision: main
     path: charts/shared-istio-routing
   destination:
-    server: 'https://kubernetes.default.svc'
+    # This targets the local cluster if ArgoCD is running on it, or the Dev Spoke
+    server: 'https://kubernetes.default.svc' 
     namespace: alumni-portal-dev
   syncPolicy:
     automated:
