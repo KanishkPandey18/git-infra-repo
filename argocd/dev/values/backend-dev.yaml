@@ -1,6 +1,6 @@
-# This is the file your Jenkins pipeline will update
 image:
-  tag: "v5"
+  repository: "avitheg/alumni-backend"
+  tag: "latest-dev" # Your Jenkins pipeline will update this
 
 env:
   NODE_ENV: "development"

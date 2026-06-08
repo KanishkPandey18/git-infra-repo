@@ -1,18 +1,24 @@
 image:
-  repository: avitheg/alumni-backend
+  repository: "" 
   pullPolicy: Always
-  tag: "v5"
+  tag: "" 
 
 service:
   port: 8000
   targetPort: 8000
 
 env:
-  # Keep your static environment configurations here
-  NODE_ENV: "production"
+  # --- Shared Configurations ---
+  NODE_ENV: "production"  # Locked in for both clusters for Node.js performance
+  KEYCLOAK_JWKS_URI: "http://keycloak-service:8080/auth/realms/application/protocol/openid-connect/certs"
+  KEYCLOAK_INTERNAL_URL: "http://keycloak-service:8080"
+  NOTIFICATION_SERVICE_URL: "http://alumni-notification-api-service:3000"
+  MONGO_URI: "mongodb://admin:adminpassword@mongo-service:27017/alumni?authSource=admin"
   KEYCLOAK_REALM: "application"
   KEYCLOAK_CLIENT_ID: "backend-client"
-  KEYCLOAK_ISSUER: "https://192.168.41.88/auth/realms/application"
   secretName: "alumni-secrets"
   KEYCLOAK_ADMIN: "admin"
   KEYCLOAK_ADMIN_PASSWORD: "admin"
+
+  # --- Placeholders for ArgoCD Overrides ---
+  KEYCLOAK_ISSUER: ""

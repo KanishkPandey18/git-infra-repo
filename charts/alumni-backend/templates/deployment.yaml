@@ -26,15 +26,20 @@ spec:
             - name: PORT
               value: {{ .Values.service.targetPort | quote }}
             
-            # --- Dynamic Cluster Routing URLs ---
+            # --- 1. The Security Fix: Securely pulling the DB password ---
             - name: MONGO_URI
-              value: "mongodb://admin:adminpassword@mongo-service.{{ .Release.Namespace }}.svc.cluster.local:27017/alumni?authSource=admin"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: MONGO_URI
+                  
+            # --- 2. The Architectural Fix: Dynamic cluster routing ---
             - name: KEYCLOAK_JWKS_URI
-              value: "http://keycloak-service.{{ .Release.Namespace }}.svc.cluster.local:8080/auth/realms/application/protocol/openid-connect/certs"
+              value: {{ .Values.env.KEYCLOAK_JWKS_URI | quote }}
             - name: NOTIFICATION_SERVICE_URL
-              value: "http://alumni-notification-api-service.{{ .Release.Namespace }}.svc.cluster.local:3000"
-            - name: KEYCLOAK_INTERNAL_URL
-              value: "http://keycloak-service.{{ .Release.Namespace }}.svc.cluster.local:8080"
+              value: {{ .Values.env.NOTIFICATION_SERVICE_URL | quote }}
+            - name: KEYCLOAK_SERVER_URL
+              value: {{ .Values.env.KEYCLOAK_INTERNAL_URL | quote }}
             
             # --- Standard Keycloak Configurations ---
             - name: KEYCLOAK_ISSUER

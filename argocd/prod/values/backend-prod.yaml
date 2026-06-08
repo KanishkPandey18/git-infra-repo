@@ -1,0 +1,7 @@
+image:
+  repository: "avitheg/alumni-backend"
+  tag: "v5"
+
+env:
+  NODE_ENV: "production"
+  KEYCLOAK_ISSUER: "https://192.168.41.38/auth/realms/application"

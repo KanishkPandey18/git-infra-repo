@@ -1,0 +1,6 @@
+image:
+  tag: "v2"
+
+env:
+  # Strictly isolated to the Prod cluster namespace (or just "kafka:9092" if relying on local namespace resolution)
+  KAFKA_BROKER: "kafka.alumni-portal-prod.svc.cluster.local:9092"

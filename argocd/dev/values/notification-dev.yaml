@@ -1,6 +1,6 @@
 image:
-  tag: "v2"
+  tag: "latest-dev" # Jenkins will update this
 
 env:
-  # In your prod values file, this will dynamically change to alumni-portal-prod
+  # Strictly isolated to the Dev cluster namespace
   KAFKA_BROKER: "kafka.alumni-portal-dev.svc.cluster.local:9092"
