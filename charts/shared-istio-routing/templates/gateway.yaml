@@ -13,3 +13,14 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
+    tls:
+      httpsRedirect: true # Automatically force HTTP to HTTPS
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: alumni-tls # Must match the secret name in Step 2
+    hosts:
+    - "*"
