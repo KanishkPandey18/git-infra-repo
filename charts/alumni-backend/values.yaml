@@ -1,5 +1,5 @@
 image:
-  repository: avitheg/alumni-frontend
+  repository: avitheg/alumni-backend
   pullPolicy: Always
   tag: "v5"
 
