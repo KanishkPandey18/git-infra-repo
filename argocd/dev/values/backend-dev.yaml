@@ -1,5 +1,6 @@
 image:
-  tag: "v5" # 
+  repository: "avitheg/alumni-backend"
+  tag: "observability-v2" # 
 
 env:
   NODE_ENV: "development"
