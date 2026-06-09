@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+  namespace: {{ .Release.Namespace }}
+data:
+  config.yaml: |
+    # PROD FIX: Added extensions so K8s can run Liveness/Readiness probes
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
+        
+    receivers:
+      otlp:
+        protocols:
+          grpc: { endpoint: 0.0.0.0:4317 }
+          http: { endpoint: 0.0.0.0:4318 }
+          
+    processors:
+      # PROD FIX 1: The Memory Limiter (Tuned for a 512Mi Pod Limit)
+      memory_limiter:
+        check_interval: 1s
+        limit_mib: 400       # 80% of the 512Mi Pod limit
+        spike_limit_mib: 100 # Leaves room for sudden spikes
+        
+      # PROD FIX 2: Explicit Batching limits
+      batch:
+        send_batch_size: 1024
+        timeout: 1s
+        
+    exporters:
+      otlp:
+        # PROD FIX 3: Dynamic Short-DNS using Helm values
+        # Defaults to obs-stack-tempo if the value isn't explicitly set
+        endpoint: "{{ .Values.tempo.host | default "obs-stack-tempo" }}:4317"
+        tls: { insecure: true }
+        
+    service:
+      extensions: [health_check]
+      pipelines:
+        traces:
+          receivers: [otlp]
+          # ORDER MATTERS: Memory Limiter MUST be the first processor
+          processors: [memory_limiter, batch]
+          exporters: [otlp]

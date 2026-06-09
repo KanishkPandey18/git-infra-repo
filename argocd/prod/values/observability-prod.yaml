@@ -1,0 +1,46 @@
+# -- Prometheus Overrides (Metrics)
+kube-prometheus-stack:
+  prometheus:
+    prometheusSpec:
+      # Keep metrics for 15 days instead of 2
+      retention: 15d
+      resources:
+        requests:
+          memory: 2Gi
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            resources:
+              requests:
+                # Scale up physical disk allocation
+                storage: 50Gi
+                
+  grafana:
+    # Consider replacing this with a secure secret reference in the future
+    adminPassword: "admin-production" 
+
+# -- Loki Overrides (Logs)
+loki-stack:
+  loki:
+    persistence:
+      size: 50Gi
+    config:
+      table_manager:
+        retention_deletes_enabled: true
+        retention_period: 360h # 15 Days
+
+# -- Tempo Overrides (Traces)
+tempo:
+  persistence:
+    size: 50Gi
+
+# -- OpenTelemetry Collector Overrides
+otel:
+  # Double the resource limits to prevent OOMKilled errors during heavy load tests
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi

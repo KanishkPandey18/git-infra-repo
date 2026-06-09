@@ -1,0 +1,21 @@
+# argocd/dev/values/observability-dev.yaml
+
+# Example overrides for your Dev cluster to save memory
+kube-prometheus-stack:
+  prometheus:
+    prometheusSpec:
+      retention: 2d
+      resources:
+        requests:
+          memory: 512Mi
+  grafana:
+    adminPassword: "admin"
+
+loki:
+  # Dev-specific Loki storage limits
+  config:
+    retention_period: 48h
+
+tempo:
+  # Dev-specific trace retention
+  retention: 48h

@@ -1,0 +1,72 @@
+# -- Prometheus & Grafana Configuration
+kube-prometheus-stack:
+  prometheus:
+    prometheusSpec:
+      podMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: "local-path" 
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 20Gi
+
+  grafana:
+    enabled: true
+    adminPassword: "admin" 
+    service:
+      type: LoadBalancer 
+      annotations:
+        metallb.universe.tf/address-pool: local-ip-pool
+    persistence:
+      enabled: true
+      type: pvc
+      storageClassName: "local-path"
+      accessModes:
+        - ReadWriteOnce
+      size: 5Gi
+      finalizers:
+        - kubernetes.io/pvc-protection
+        
+    # Generic Short-DNS for Data Sources
+    additionalDataSources:
+      - name: Loki
+        type: loki
+        url: http://obs-stack-loki:3100
+      - name: Tempo
+        type: tempo
+        url: http://obs-stack-tempo:3100
+
+# -- Loki (Logs) Configuration
+loki-stack:
+  loki:
+    persistence:
+      enabled: true
+      storageClassName: "local-path"
+      size: 10Gi
+  promtail:
+    enabled: true 
+    config:
+      clients:
+        # Generic Short-DNS for Log Pushing
+        - url: http://obs-stack-loki:3100/loki/api/v1/push
+
+# -- Tempo (Traces) Configuration
+tempo:
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+  persistence:
+    enabled: true
+    storageClassName: "local-path"
+    size: 10Gi
+
+# -- Custom OpenTelemetry Collector Settings
+otel:
+  image:
+    repository: "otel/opentelemetry-collector"
+    tag: "0.100.0"

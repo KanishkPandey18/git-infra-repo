@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alumni-observability-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/kanishkpandey18/git-infra-repo.git'
+    targetRevision: main
+    # Point this to the exact folder from your terminal screenshot
+    path: charts/observability-stack
+    helm:
+      valueFiles:
+        - ../../argocd/dev/values/observability-dev.yaml
+  destination:
+    # Crucial: Targeting your downstream Dev cluster from Rancher
+    name: dev-cluster 
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      # Tells Argo to create the observability namespace if it doesn't exist
+      - CreateNamespace=true
