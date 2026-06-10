@@ -1,10 +1,1 @@
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: alumni-backend-rule
-  namespace: alumni-portal-dev
-spec:
-  host: alumni-backend-service.alumni-portal-dev.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL # We are disabling mTLS to verify connectivity
+
