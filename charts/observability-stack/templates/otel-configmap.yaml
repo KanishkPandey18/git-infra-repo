@@ -29,10 +29,14 @@ data:
         timeout: 1s
         
     exporters:
+      # Tempo Exporter (gRPC - NO http:// prefix)
       otlp:
-        # PROD FIX 3: Dynamic Short-DNS using Helm values
-        # Defaults to obs-stack-tempo if the value isn't explicitly set
-        endpoint: "alumni-observability-dev-tempo:4317"
+        endpoint: "alumni-observability-dev-tempo.observability.svc.cluster.local:4317"
+        tls: { insecure: true }
+      
+      # Loki Exporter (HTTP - REQUIRES http:// prefix)
+      loki:
+        endpoint: "http://alumni-observability-dev-loki.observability.svc.cluster.local:3100/loki/api/v1/push"
         tls: { insecure: true }
         
     service:
