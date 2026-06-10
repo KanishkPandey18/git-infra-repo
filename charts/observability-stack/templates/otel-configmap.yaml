@@ -32,7 +32,7 @@ data:
       otlp:
         # PROD FIX 3: Dynamic Short-DNS using Helm values
         # Defaults to obs-stack-tempo if the value isn't explicitly set
-        endpoint: "{{ .Values.tempo.host | default "obs-stack-tempo" }}:4317"
+        endpoint: "tempo:4317"
         tls: { insecure: true }
         
     service:
