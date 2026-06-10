@@ -7,7 +7,7 @@ spec:
   hosts:
   - "*"
   gateways:
-  - istio-system/alumni-shared-gateway
+  - alumni-shared-gateway
   http:
     - match:
       - uri:
