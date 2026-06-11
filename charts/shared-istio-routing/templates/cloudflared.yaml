@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflare-tunnel
+  # This dynamically places the tunnel in the same namespace as your gateway (alumni-portal-dev)
+  namespace: {{ .Release.Namespace }} 
+  labels:
+    app: cloudflared
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: cloudflared
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+      - name: cloudflared
+        image: cloudflare/cloudflared:latest
+        args:
+        - tunnel
+        - --no-autoupdate
+        - run
+        env:
+        - name: TUNNEL_TOKEN
+          value: "eyJhIjoiMjdkNTdhZDZhMDY1NGFlNTQzNjY0Nzc0Mjg5YzJmN2IiLCJ0IjoiMGRkMjQ2NmQtODM5My00MGU2LWIwNDEtZWZiNDUxOTk5NmQ5IiwicyI6Ik4yVmhNekk0WmpZdE9UaGtaaTAwTVRaa0xUZzNaVFl0WkRoaFptRmtaVE5rTUdGaSJ9"
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
