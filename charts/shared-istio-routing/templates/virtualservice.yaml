@@ -25,6 +25,11 @@ spec:
           host: keycloak-service.{{ .Release.Namespace }}.svc.cluster.local
           port:
             number: 8080
+        headers:
+          request:
+            set:
+              x-forwarded-proto: "https"
+              x-forwarded-port: "443"
     - match:
       - uri:
           prefix: /
