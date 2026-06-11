@@ -1,2 +1,2 @@
 image:
-  tag: "v8" # Your Jenkins pipeline will run a script to update this string automatically
+  tag: "v1"
