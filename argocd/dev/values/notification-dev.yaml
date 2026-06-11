@@ -1,5 +1,5 @@
 image:
-  tag: "v2" # Jenkins will update this
+  tag: "v1"
 
 env:
   # Strictly isolated to the Dev cluster namespace
