@@ -4,4 +4,4 @@ image:
 
 env:
   NODE_ENV: "production"
-  KEYCLOAK_ISSUER: "https://192.168.41.38/auth/realms/application"
+  KEYCLOAK_ISSUER: "https://jecrconnect.xyz/auth/realms/application"
