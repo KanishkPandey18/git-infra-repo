@@ -1,2 +1,3 @@
 image:
+  repository: "192.168.41.90:8082/v2/alumni-frontend"
   tag: "v1"
