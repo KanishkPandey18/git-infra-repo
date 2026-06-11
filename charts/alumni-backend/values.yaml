@@ -22,3 +22,6 @@ env:
 
   # --- Placeholders for ArgoCD Overrides ---
   KEYCLOAK_ISSUER: ""
+
+  OTEL_SERVICE_NAME: ""
+  OTEL_EXPORTER_OTLP_ENDPOINT: ""
