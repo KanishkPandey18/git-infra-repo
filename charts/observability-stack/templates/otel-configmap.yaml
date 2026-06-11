@@ -5,7 +5,6 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   config.yaml: |
-    # PROD FIX: Added extensions so K8s can run Liveness/Readiness probes
     extensions:
       health_check:
         endpoint: 0.0.0.0:13133
@@ -17,26 +16,19 @@ data:
           http: { endpoint: 0.0.0.0:4318 }
           
     processors:
-      # PROD FIX 1: The Memory Limiter (Tuned for a 512Mi Pod Limit)
       memory_limiter:
         check_interval: 1s
-        limit_mib: 400       # 80% of the 512Mi Pod limit
-        spike_limit_mib: 100 # Leaves room for sudden spikes
+        limit_mib: 400
+        spike_limit_mib: 100
         
-      # PROD FIX 2: Explicit Batching limits
       batch:
         send_batch_size: 1024
         timeout: 1s
         
     exporters:
-      # Tempo Exporter (gRPC - NO http:// prefix)
+      # Tempo Exporter (gRPC) - Only exporting traces!
       otlp:
         endpoint: "alumni-observability-dev-tempo.observability.svc.cluster.local:4317"
-        tls: { insecure: true }
-      
-      # Loki Exporter (HTTP - REQUIRES http:// prefix)
-      loki:
-        endpoint: "http://alumni-observability-dev-loki.observability.svc.cluster.local:3100/loki/api/v1/push"
         tls: { insecure: true }
         
     service:
@@ -44,6 +36,5 @@ data:
       pipelines:
         traces:
           receivers: [otlp]
-          # ORDER MATTERS: Memory Limiter MUST be the first processor
           processors: [memory_limiter, batch]
           exporters: [otlp]
