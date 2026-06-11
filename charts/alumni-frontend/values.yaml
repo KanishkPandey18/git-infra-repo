@@ -2,7 +2,9 @@ image:
   repository: ""
   pullPolicy: Always
   tag: ""
-
+imagePullSecrets:
+  - name: nexus-creds
+  
 service:
   port: 80
   targetPort: 80
