@@ -47,12 +47,16 @@ kube-prometheus-stack:
 # FIXED: Aligned structural naming key from 'loki' to 'loki-stack'
 loki-stack:
   loki:
+    # Do NOT put retention_period inside a 'config' block.
+    # Use limits_config at this level:
     limits_config:
       retention_period: 48h
+      reject_old_samples: true
+      reject_old_samples_max_age: 48h
     persistence:
       enabled: true
       storageClassName: "local-path"
-      size: 10Gi # Reduced from 10Gi for space saving
+      size: 10Gi
   promtail:
     enabled: true 
     config:
