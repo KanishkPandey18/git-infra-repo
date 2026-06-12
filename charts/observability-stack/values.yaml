@@ -37,7 +37,7 @@ kube-prometheus-stack:
         url: http://alumni-observability-dev-loki:3100
       - name: Tempo
         type: tempo
-        url: http://alumni-observability-dev-tempo:3100
+        url: http://alumni-observability-dev-tempo:4317 # Routed directly to Tempo's OTLP gRPC endpoint
 
 # -- Loki (Logs) Configuration
 loki-stack:
@@ -68,5 +68,5 @@ tempo:
 # -- Custom OpenTelemetry Collector Settings
 otel:
   image:
-    repository: "otel/opentelemetry-collector"
+    repository: "otel/opentelemetry-collector-contrib"
     tag: "0.100.0"
