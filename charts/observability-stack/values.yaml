@@ -37,7 +37,7 @@ kube-prometheus-stack:
         url: http://alumni-observability-dev-loki:3100
       - name: Tempo
         type: tempo
-        url: http://alumni-observability-dev-tempo:4317 # Routed directly to Tempo's OTLP gRPC endpoint
+        url: http://alumni-observability-dev-tempo:3200 
 
 # -- Loki (Logs) Configuration
 loki-stack:
