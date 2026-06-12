@@ -42,7 +42,7 @@ kube-prometheus-stack:
         url: http://alumni-observability-dev-loki:3100
       - name: Tempo
         type: tempo
-        url: http://alumni-observability-dev-tempo:4317
+        url: http://alumni-observability-dev-tempo.observability.svc.cluster.local:3200
 
 # FIXED: Aligned structural naming key from 'loki' to 'loki-stack'
 loki-stack:
