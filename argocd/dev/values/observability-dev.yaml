@@ -60,3 +60,5 @@ tempo:
     enabled: true
     storageClassName: "local-path"
     size: 10Gi # Reduced from 10Gi for space saving
+otel:
+  endpoint: "alumni-observability-dev-tempo:4317"
