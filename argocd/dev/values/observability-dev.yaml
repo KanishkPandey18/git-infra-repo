@@ -53,6 +53,11 @@ loki-stack:
       enabled: true
       storageClassName: "local-path"
       size: 10Gi # Reduced from 10Gi for space saving
+  promtail:
+    enabled: true 
+    config:
+      clients:
+        - url: http://alumni-observability-dev-loki:3100/loki/api/v1/push
 
 tempo:
   retention: 48h
