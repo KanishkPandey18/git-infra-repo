@@ -26,10 +26,16 @@ data:
         timeout: 1s
         
     exporters:
-      # Tempo Exporter (gRPC) - Only exporting traces!
-      otlp:
+      tempo:
         endpoint: "alumni-observability-dev-tempo.observability.svc.cluster.local:4317"
         tls: { insecure: true }
+    
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [tempo]  # Change from 'otlp' to 'tempo' here
         
     service:
       extensions: [health_check]
