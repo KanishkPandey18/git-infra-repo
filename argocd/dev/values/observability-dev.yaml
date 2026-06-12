@@ -47,7 +47,7 @@ kube-prometheus-stack:
 # FIXED: Aligned structural naming key from 'loki' to 'loki-stack'
 loki-stack:
   loki:
-    config:
+    limits_config:
       retention_period: 48h
     persistence:
       enabled: true
