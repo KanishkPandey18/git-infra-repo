@@ -1,25 +1,34 @@
-{{- if eq (printf "%v" .Values.wafEnabled) "true" }}
+{{- $enabled := false }}
+{{- if kindIs "string" .Values.wafEnabled }}
+  {{- if eq .Values.wafEnabled "true" }}
+    {{- $enabled = true }}
+  {{- end }}
+{{- else if kindIs "bool" .Values.wafEnabled }}
+  {{- $enabled = .Values.wafEnabled }}
+{{- end }}
+
+{{- if $enabled }}
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
-  name: coraza-waf-{{ .Release.Namespace }} # Differentiates dev vs prod plugin instances inside istio-system
-  namespace: istio-system # FORCE it into the gateway's namespace
+  name: coraza-waf-{{ .Release.Namespace }}
+  namespace: istio-system # Landing directly where the IngressGateway lives
   labels:
     app: coraza-waf
 spec:
   selector:
     matchLabels:
-      istio: ingressgateway # Perfectly targets your gateway pod
+      istio: ingressgateway
   url: oci://ghcr.io/corazawaf/coraza-proxy-wasm:latest
   imagePullPolicy: IfNotPresent
   phase: AUTHN
   pluginConfig:
     directives_map:
       default:
-        - "SecDebugLogLevel 0" 
+        - "SecDebugLogLevel 0"
         - "SecRuleEngine On"
-        - "SecRequestBodyAccess On" 
-        - "SecResponseBodyAccess Off" 
+        - "SecRequestBodyAccess On"
+        - "SecResponseBodyAccess Off"
         - "Include @coraza.conf-recommended"
         - "Include @owasp_crs/*.conf"
     default_directives: "default"
