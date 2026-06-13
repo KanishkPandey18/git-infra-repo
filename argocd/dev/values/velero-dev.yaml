@@ -14,3 +14,7 @@ velero:
     image:
       repository: docker.io/bitnami/kubectl
       tag: "1.30.0"
+
+  velero:
+  upgradeCRDs: false
+  # ... (keep your backupStorageLocation block here)
