@@ -1,21 +1,73 @@
-# argocd/dev/values/observability-dev.yaml
+# ALIGNED DEV OBSERVABILITY OVERRIDES VALUE STREAM
 
-# Example overrides for your Dev cluster to save memory
 kube-prometheus-stack:
   prometheus:
     prometheusSpec:
       retention: 2d
+      # Crucial: Keeps custom monitors discoverable within your sandbox env
+      podMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
       resources:
         requests:
           memory: 512Mi
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: "local-path" 
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 20Gi # Reduced from 20Gi for lightweight Dev VM usage
+
   grafana:
     adminPassword: "admin"
+    enabled: true
+    service:
+      type: LoadBalancer 
+      annotations:
+        metallb.universe.tf/address-pool: local-ip-pool
+    persistence:
+      enabled: true
+      type: pvc
+      storageClassName: "local-path"
+      accessModes:
+        - ReadWriteOnce
+      size: 5Gi # Optimized for development footprint
+      finalizers:
+        - kubernetes.io/pvc-protection
+        
+    additionalDataSources:
+      - name: Loki
+        type: loki
+        url: http://alumni-observability-dev-loki:3100
+      - name: Tempo
+        type: tempo
+        url: http://alumni-observability-dev-tempo:3100
 
-loki:
-  # Dev-specific Loki storage limits
-  config:
-    retention_period: 48h
+# FIXED: Aligned structural naming key from 'loki' to 'loki-stack'
+loki-stack:
+  loki:
+    # Do NOT put retention_period inside a 'config' block.
+    # Use limits_config at this level:
+    limits_config:
+      retention_period: 48h
+      reject_old_samples: true
+      reject_old_samples_max_age: 48h
+    persistence:
+      enabled: true
+      storageClassName: "local-path"
+      size: 10Gi
+  promtail:
+    enabled: true 
+    config:
+      clients:
+        - url: http://alumni-observability-dev-loki:3100/loki/api/v1/push
 
 tempo:
-  # Dev-specific trace retention
   retention: 48h
+  persistence:
+    enabled: true
+    storageClassName: "local-path"
+    size: 10Gi # Reduced from 10Gi for space saving
+otel:
+  endpoint: "alumni-observability-dev-tempo:4317"

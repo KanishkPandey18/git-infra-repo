@@ -1,22 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: alumni-routing-dev
+  name: dr-minio-vault
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/kanishkpandey18/git-infra-repo.git'
     targetRevision: main
-    path: charts/shared-istio-routing
+    path: charts/minio-vault
     helm:
-      parameters:
-        - name: wafEnabled
-          value: "true"
+      valueFiles:
+        - ../../argocd/dr/values/minio-vault.yaml
   destination:
-    name: dev-cluster
-    namespace: alumni-portal-dev
+    name: backup-cluster
+    namespace: minio
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

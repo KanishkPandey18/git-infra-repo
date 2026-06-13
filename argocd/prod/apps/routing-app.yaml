@@ -12,8 +12,9 @@ spec:
     helm:
       parameters:
         - name: cloudflareToken
-          # Your specific tunnel token injected only for PROD
           value: "eyJhIjoiMjdkNTdhZDZhMDY1NGFlNTQzNjY0Nzc0Mjg5YzJmN2IiLCJ0IjoiMGRkMjQ2NmQtODM5My00MGU2LWIwNDEtZWZiNDUxOTk5NmQ5IiwicyI6Ik4yVmhNekk0WmpZdE9UaGtaaTAwTVRaa0xUZzNaVFl0WkRoaFptRmtaVE5rTUdGaSJ9"
+        - name: wafEnabled
+          value: "true"
   destination:
     name: prod-cluster
     namespace: alumni-portal-prod

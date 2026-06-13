@@ -1,22 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: alumni-routing-dev
+  name: velero-prod
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/kanishkpandey18/git-infra-repo.git'
     targetRevision: main
-    path: charts/shared-istio-routing
+    path: charts/velero-agent
     helm:
-      parameters:
-        - name: wafEnabled
-          value: "true"
+      valueFiles:
+        - ../../argocd/prod/values/velero-prod.yaml
   destination:
-    name: dev-cluster
-    namespace: alumni-portal-dev
+    name: prod-cluster
+    namespace: velero
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

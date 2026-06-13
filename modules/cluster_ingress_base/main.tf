@@ -51,6 +51,25 @@ resource "helm_release" "istiod" {
   chart      = "istiod"
   version    = "1.20.0"
   namespace  = "istio-system"
+
+  # --- TRACING CONFIGURATION START ---
+  set {
+    name  = "meshConfig.enableTracing"
+    value = "true"
+  }
+  set {
+    name  = "meshConfig.extensionProviders[0].name"
+    value = "otel-tracing"
+  }
+  set {
+    name  = "meshConfig.extensionProviders[0].opentelemetry.port"
+    value = "4317"
+  }
+  set {
+    name  = "meshConfig.extensionProviders[0].opentelemetry.service"
+    value = "otel-collector.observability.svc.cluster.local"
+  }
+  # --- TRACING CONFIGURATION END ---
 }
 
 resource "helm_release" "istio_ingress" {
