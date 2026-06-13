@@ -12,7 +12,7 @@ apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
   name: coraza-waf-{{ .Release.Namespace }}
-  namespace: istio-system
+  namespace: istio-system # MUST be istio-system to protect the gateway
   labels:
     app: coraza-waf
 spec:
@@ -25,24 +25,21 @@ spec:
   pluginConfig:
     directives_map:
       default:
-        # 1. Core Engine Setup
         - "SecRuleEngine On"
         - "SecRequestBodyAccess On"
         - "SecResponseBodyAccess Off"
         - "SecDebugLogLevel 0"
         
-        # 2. Advanced SQLi Rules (Safely Wrapped in single quotes to escape backslashes)
-        - 'SecRule ARGS "(?i)(select|union|insert|update|delete|drop|alter|where|from|grant|--|#|\/\*)" "id:920100,phase:2,deny,status:403,msg:\x27Advanced SQLi Attempt Blocked\x27"'
-        - 'SecRule ARGS "(?i)\bor\b\s+\d+\s*=\s*\d+" "id:1005,phase:2,deny,status:403,msg:\x27SQL Tautology Blocked\x27"'
-        - 'SecRule ARGS "(['\x22\x00\n\r\x1a])" "id:1006,phase:2,deny,status:403,msg:\x27SQL Quote Break Blocked\x27"'
+        # Your stable, proven rules
+        - "SecRule ARGS \"'(?:--|#|\\*|\\+)\" \"id:1001,phase:2,deny,status:403,msg:'SQL Injection Blocked'\""
+        - "SecRule ARGS \"(?i)\\bhas_key\\b|\\bor\\b\\s+\\d+\\s*=\\s*\\d+|\\bunion\\b\\s+select\" \"id:1005,phase:2,deny,status:403,msg:'SQL Tautology Bypass Blocked'\""
+        - "SecRule ARGS \"(?i)<script\" \"id:1002,phase:2,deny,status:403,msg:'XSS Attack Blocked'\""
+        - "SecRule REQUEST_COOKIES \"(?i)<script\" \"id:1003,phase:2,deny,status:403,msg:'XSS Cookie Attack Blocked'\""
+        - "SecRule REQUEST_HEADERS:User-Agent \"(?i)(sqlmap|nikto|dirbuster|gobuster)\" \"id:1004,phase:1,deny,status:403,msg:'Malicious Scanner Detected'\""
         
-        # 3. Robust XSS Protection (Handles alert, script, javascript protocols, and event triggers)
-        - 'SecRule ARGS "(?i)(<script|javascript:|onerror=|onload=|alert\(|src=x)" "id:941100,phase:2,deny,status:403,msg:\x27Advanced XSS Attempt Blocked\x27"'
-        
-        # 4. Path Traversal & Local File Inclusion (LFI) Defenses
-        - 'SecRule ARGS "(?i)(\.\.\/|\.\.\\\\|etc\/passwd|config\.env)" "id:930100,phase:2,deny,status:403,msg:\x27Path Traversal / LFI Attempt Blocked\x27"'
-        
-        # 5. Generic Scanner Blocker
-        - 'SecRule REQUEST_HEADERS:User-Agent "(?i)(sqlmap|nikto|dirbuster|gobuster)" "id:1004,phase:1,deny,status:403,msg:\x27Malicious Scanner Blocked\x27"'
+        # Simple, safe additions that will not crash Wasm
+        - "SecRule ARGS \"etc/passwd\" \"id:1006,phase:2,deny,status:403,msg:'LFI Blocked'\""
+        - "SecRule ARGS \"\\.\\./\" \"id:1007,phase:2,deny,status:403,msg:'Path Traversal Blocked'\""
+        - "SecRule ARGS \"(?i)javascript:\" \"id:1008,phase:2,deny,status:403,msg:'JS Protocol Blocked'\""
     default_directives: "default"
 {{- end }}
