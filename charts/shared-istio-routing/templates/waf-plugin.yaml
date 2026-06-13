@@ -2,14 +2,14 @@
 apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
-  name: coraza-waf
-  namespace: {{ .Release.Namespace }} 
+  name: coraza-waf-{{ .Release.Namespace }} # Differentiates dev vs prod plugin instances inside istio-system
+  namespace: istio-system # FORCE it into the gateway's namespace
   labels:
     app: coraza-waf
 spec:
   selector:
     matchLabels:
-      istio: ingressgateway 
+      istio: ingressgateway # Perfectly targets your gateway pod
   url: oci://ghcr.io/corazawaf/coraza-proxy-wasm:latest
   imagePullPolicy: IfNotPresent
   phase: AUTHN
