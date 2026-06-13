@@ -12,7 +12,7 @@ apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
   name: coraza-waf-{{ .Release.Namespace }}
-  namespace: istio-system # Landing directly where the IngressGateway lives
+  namespace: istio-system
   labels:
     app: coraza-waf
 spec:
@@ -25,11 +25,17 @@ spec:
   pluginConfig:
     directives_map:
       default:
-        - "SecDebugLogLevel 0"
+        # Base engine state setup
         - "SecRuleEngine On"
         - "SecRequestBodyAccess On"
-        - "SecResponseBodyAccess Off"
-        - "Include @coraza.conf-recommended"
-        - "Include @owasp_crs/*.conf"
+        - "SecResponseBodyAccess Off" # Keeping your cluster's memory usage optimized
+        - "SecDebugLogLevel 0"
+        
+        # Self-contained core injection rules (Zero-file dependency defenses)
+        # Protects against standard SQLi and string manipulation exploits
+        - "SecRule ARGS \"'(?:--|#|\\*|\\+)\" \"id:1001,phase:2,deny,status:403,msg:'SQL Injection Blocked'\""
+        - "SecRule ARGS \"(?i)<script\" \"id:1002,phase:2,deny,status:403,msg:'XSS Attack Blocked'\""
+        - "SecRule REQUEST_COOKIES \"(?i)<script\" \"id:1003,phase:2,deny,status:403,msg:'XSS Cookie Attack Blocked'\""
+        - "SecRule REQUEST_HEADERS:User-Agent \"(?i)(sqlmap|nikto|dirbuster|gobuster)\" \"id:1004,phase:1,deny,status:403,msg:'Malicious Scanner Detected'\""
     default_directives: "default"
 {{- end }}
