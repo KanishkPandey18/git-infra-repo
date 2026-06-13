@@ -25,19 +25,23 @@ spec:
   pluginConfig:
     directives_map:
       default:
-        # Base engine state setup
+        # 1. Engine Core States Setup
         - "SecRuleEngine On"
         - "SecRequestBodyAccess On"
-        - "SecResponseBodyAccess Off" # Keeping your cluster's memory usage optimized
+        - "SecResponseBodyAccess Off" # Protects your bare-metal ProLiant nodes from OOM loops
         - "SecDebugLogLevel 0"
         
-        # Self-contained core injection rules (Zero-file dependency defenses)
-        # Protects against standard SQLi and string manipulation exploits
-        - "SecRule ARGS \"'(?:--|#|\\*|\\+)\" \"id:1001,phase:2,deny,status:403,msg:'SQL Injection Blocked'\""
-        # New Rule 1005: Catches "OR 1=1" style tautology patterns even without single quotes
-        - "SecRule ARGS \"(?i)\\bhas_key\\b|\\bor\\b\\s+\\d+\\s*=\\s*\\d+|\\bunion\\b\\s+select\" \"id:1005,phase:2,deny,status:403,msg:'SQL Tautology Bypass Blocked'\""
-        - "SecRule ARGS \"(?i)<script\" \"id:1002,phase:2,deny,status:403,msg:'XSS Attack Blocked'\""
-        - "SecRule REQUEST_COOKIES \"(?i)<script\" \"id:1003,phase:2,deny,status:403,msg:'XSS Cookie Attack Blocked'\""
-        - "SecRule REQUEST_HEADERS:User-Agent \"(?i)(sqlmap|nikto|dirbuster|gobuster)\" \"id:1004,phase:1,deny,status:403,msg:'Malicious Scanner Detected'\""
+        # 2. Robust SQL Injection Defenses (Catches variations like '---, #, and comment breaks)
+        - "SecRule ARGS \"(?i)(['\"\\x00\\n\\r\\x1a]|\\b(select|union|insert|update|delete|drop|alter|where|from|grant)\\b|--|#|\\/\\*)\" \"id:920100,phase:2,deny,status:403,msg:'Advanced SQLi Attempt Blocked'\""
+        - "SecRule ARGS \"(?i)\\bhas_key\\b|\\bor\\b\\s+(\\d+|'[^']+')\\s*=\\s*(\\d+|'[^']+')|\\bunion\\b\\s+select\" \"id:1005,phase:2,deny,status:403,msg:'SQL Tautology Blocked'\""
+        
+        # 3. Comprehensive Cross-Site Scripting (XSS) Defenses (Catches JavaScript URIs and Event Handlers)
+        - "SecRule ARGS \"(?i)(<script|javascript:|onerror=|onload=|alert\\(|src=x)\" \"id:941100,phase:2,deny,status:403,msg:'Advanced XSS Attempt Blocked'\""
+        
+        # 4. Path Traversal & Local File Inclusion (LFI) Defenses (Catches ../ and system file names)
+        - "SecRule ARGS \"(?i)(\\.\\.\\/|\\.\\.\\\\|etc\\/passwd|config\\.env|boot\\.ini|win\\.ini)\" \"id:930100,phase:2,deny,status:403,msg:'Path Traversal / LFI Attempt Blocked'\""
+        
+        # 5. Generic Scanner Blocker (Header Rule)
+        - "SecRule REQUEST_HEADERS:User-Agent \"(?i)(sqlmap|nikto|dirbuster|gobuster|w3af|acunetix)\" \"id:1004,phase:1,deny,status:403,msg:'Malicious Scanner Blocked'\""
     default_directives: "default"
 {{- end }}
