@@ -36,11 +36,3 @@ data:
           receivers: [otlp]
           processors: [memory_limiter, batch]
           exporters: [tempo]  # Change from 'otlp' to 'tempo' here
-        
-    service:
-      extensions: [health_check]
-      pipelines:
-        traces:
-          receivers: [otlp]
-          processors: [memory_limiter, batch]
-          exporters: [otlp]
