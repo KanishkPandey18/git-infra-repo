@@ -54,7 +54,16 @@ loki-stack:
         - url: http://alumni-observability-dev-loki:3100/loki/api/v1/push
 
 # -- Tempo (Traces) Configuration
+# -- Tempo (Traces) Configuration
 tempo:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+        http:
+          endpoint: "0.0.0.0:4318"
+          
   storage:
     trace:
       backend: local
@@ -64,7 +73,6 @@ tempo:
     enabled: true
     storageClassName: "local-path"
     size: 10Gi
-
 # -- Custom OpenTelemetry Collector Settings
 otel:
   image:
