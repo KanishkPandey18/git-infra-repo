@@ -30,10 +30,12 @@ data:
         endpoint: "alumni-observability-dev-tempo.observability.svc.cluster.local:4317"
         tls:
           insecure: true
+      debug: # <--- ADD THIS
+        verbosity: detailed # <--- ADD THIS
         
     service:
       pipelines:
         traces:
           receivers: [otlp]
           processors: [memory_limiter, batch]
-          exporters: [otlp]
+          exporters: [otlp, debug]
