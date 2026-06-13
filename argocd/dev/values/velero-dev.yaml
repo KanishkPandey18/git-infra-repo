@@ -8,3 +8,9 @@ velero:
           region: minio
           s3ForcePathStyle: true
           s3Url: "http://192.168.41.37:32000"
+  
+  # This is the fix to stop it from guessing v1.34
+  kubectl:
+    image:
+      repository: docker.io/bitnami/kubectl
+      tag: "1.30.0"
