@@ -1,1 +1,17 @@
-h
+persistence:
+  storageClass: "local-path"
+  size: 50Gi
+
+service:
+  nodePort: 32000
+
+consoleService:
+  nodePort: 32001
+
+buckets:
+  - name: dev-cluster-backups
+    policy: private
+    purge: false
+  - name: prod-cluster-backups
+    policy: private
+    purge: false
