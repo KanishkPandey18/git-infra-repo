@@ -50,10 +50,10 @@ spec:
               value: {{ .Values.env.KEYCLOAK_CLIENT_ID | quote }}
 
             # --- OBSERVABILITY TELEMETRY INJECTION (gRPC FLOW ON PORT 4317) ---
-            - name: OTEL_SERVICE_NAME
-              value: {{ .Values.env.OTEL_SERVICE_NAME | quote }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: {{ .Values.env.OTEL_EXPORTER_OTLP_ENDPOINT | quote }}
+              value: "http://otel-collector.observability.svc.cluster.local:4317"
+            - name: OTEL_SERVICE_NAME
+              value: "alumni-backend"
               
           resources:
             limits:
