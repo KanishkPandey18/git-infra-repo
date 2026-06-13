@@ -9,8 +9,11 @@ spec:
     repoURL: 'https://github.com/kanishkpandey18/git-infra-repo.git'
     targetRevision: main
     path: charts/shared-istio-routing
+    helm:
+      parameters:
+        - name: wafEnabled
+          value: "true"
   destination:
-    # This targets the local cluster if ArgoCD is running on it, or the Dev Spoke
     name: dev-cluster
     namespace: alumni-portal-dev
   syncPolicy:

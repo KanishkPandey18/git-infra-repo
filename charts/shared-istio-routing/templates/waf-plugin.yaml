@@ -1,0 +1,26 @@
+{{- if eq (printf "%v" .Values.wafEnabled) "true" }}
+apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
+metadata:
+  name: coraza-waf
+  namespace: {{ .Release.Namespace }} 
+  labels:
+    app: coraza-waf
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway 
+  url: oci://ghcr.io/corazawaf/coraza-proxy-wasm:latest
+  imagePullPolicy: IfNotPresent
+  phase: AUTHN
+  pluginConfig:
+    directives_map:
+      default:
+        - "SecDebugLogLevel 0" 
+        - "SecRuleEngine On"
+        - "SecRequestBodyAccess On" 
+        - "SecResponseBodyAccess Off" 
+        - "Include @coraza.conf-recommended"
+        - "Include @owasp_crs/*.conf"
+    default_directives: "default"
+{{- end }}
