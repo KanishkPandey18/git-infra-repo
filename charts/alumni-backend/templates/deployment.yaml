@@ -11,6 +11,13 @@ spec:
       app: alumni-backend
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/proxyConfig: |
+          proxyMetadata:
+            ISTIO_META_HTTP_HEADERS: "true"
+        # Increase the max request headers size to 128KB (from 60KB default)
+        sidecar.istio.io/extraStatTags: "request_headers_kb"
+        sidecar.istio.io/proxyConfig: '{"max_request_headers_kb": "128"}'
       labels:
         app: alumni-backend
     spec:
