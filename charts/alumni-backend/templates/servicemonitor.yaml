@@ -11,7 +11,7 @@ spec:
     matchLabels:
       app: alumni-backend
   endpoints:
-    - port: http-metrics
+    - port: http-api
       path: /metrics
       interval: 15s
       scrapeTimeout: 10s
