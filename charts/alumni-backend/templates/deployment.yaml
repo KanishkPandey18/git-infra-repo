@@ -12,12 +12,12 @@ spec:
   template:
     metadata:
       annotations:
+        # Merged proxyConfig to prevent duplicate YAML keys
+        sidecar.istio.io/extraStatTags: "request_headers_kb"
         sidecar.istio.io/proxyConfig: |
           proxyMetadata:
             ISTIO_META_HTTP_HEADERS: "true"
-        # Increase the max request headers size to 128KB (from 60KB default)
-        sidecar.istio.io/extraStatTags: "request_headers_kb"
-        sidecar.istio.io/proxyConfig: '{"max_request_headers_kb": "128"}'
+          maxRequestHeadersKb: 128
       labels:
         app: alumni-backend
     spec:
@@ -56,11 +56,13 @@ spec:
             - name: KEYCLOAK_CLIENT_ID
               value: {{ .Values.env.KEYCLOAK_CLIENT_ID | quote }}
 
-            # --- OBSERVABILITY TELEMETRY INJECTION (gRPC FLOW ON PORT 4317) ---
+            # --- OBSERVABILITY TELEMETRY INJECTION (Dynamic from values.yaml) ---
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "otel-collector.observability.svc.cluster.local:4317"
+              value: {{ .Values.env.OTEL_EXPORTER_OTLP_ENDPOINT | quote }}
             - name: OTEL_SERVICE_NAME
-              value: "alumni-backend"
+              value: {{ .Values.env.OTEL_SERVICE_NAME | quote }}
+            - name: OTEL_LOG_LEVEL
+              value: {{ .Values.env.OTEL_LOG_LEVEL | quote }}
               
           resources:
             limits:

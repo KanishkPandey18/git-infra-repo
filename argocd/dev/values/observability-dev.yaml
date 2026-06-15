@@ -40,8 +40,16 @@ kube-prometheus-stack:
       - name: Loki
         type: loki
         url: http://alumni-observability-dev-loki:3100
+        # --- THE MISSING MAGIC LINK FOR THE TEMPO BUTTON ---
+        jsonData:
+          derivedFields:
+            - name: TraceID
+              matcherRegex: '"traceId":"(\w+)"'
+              datasourceUid: tempo   # This links directly to the Tempo UID below
+              url: '$${__value.raw}' # Double $$ to escape Helm templating
       - name: Tempo
         type: tempo
+        uid: tempo                   # Added UID so Loki can find it
         url: http://alumni-observability-dev-tempo:3100
 
 # FIXED: Aligned structural naming key from 'loki' to 'loki-stack'

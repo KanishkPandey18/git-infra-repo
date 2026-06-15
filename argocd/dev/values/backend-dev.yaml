@@ -6,10 +6,8 @@ env:
   NODE_ENV: "development"
   KEYCLOAK_ISSUER: "https://192.168.41.88/auth/realms/application"
 
-  # Observability ENTERPRISE TELEMETRY ENGINE (gRPC)
   OTEL_SERVICE_NAME: "alumni-backend"
   
-  # FIX: No 'http://' prefix! Just host:port. (gRPC)
-  OTEL_EXPORTER_OTLP_ENDPOINT: "otel-collector.observability.svc.cluster.local:4317"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.observability.svc.cluster.local:4318/v1/traces"
 
   OTEL_LOG_LEVEL: "debug"
