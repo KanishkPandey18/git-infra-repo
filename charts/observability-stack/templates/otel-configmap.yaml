@@ -22,22 +22,23 @@ data:
         check_interval: 1s
         limit_mib: 400
         spike_limit_mib: 100
+      batch:
+        send_batch_size: 1024
+        timeout: 1s
         
       batch:
         send_batch_size: 1024
         timeout: 1s
         
     exporters:
-      otlp:
+      tempo:
         endpoint: "alumni-observability-dev-tempo.observability.svc.cluster.local:4317"
         tls:
           insecure: true
-      debug: # <--- ADD THIS
-        verbosity: detailed # <--- ADD THIS
         
     service:
       pipelines:
         traces:
-          receivers: [otlp, zipkin]
+          receivers: [otlp]        #add zipkin here if you want to receive traces from zipkin as well
           processors: [memory_limiter, batch]
-          exporters: [otlp, debug]
+          exporters: [tempo]
