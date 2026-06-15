@@ -8,6 +8,6 @@ env:
 
   OTEL_SERVICE_NAME: "alumni-backend"
   
-  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.observability.svc.cluster.local:4318/v1/traces"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.observability.svc.cluster.local:4318"
 
   OTEL_LOG_LEVEL: "debug"
