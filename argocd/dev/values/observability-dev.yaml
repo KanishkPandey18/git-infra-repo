@@ -54,6 +54,8 @@ kube-prometheus-stack:
 
 # FIXED: Aligned structural naming key from 'loki' to 'loki-stack'
 loki-stack:
+  grafana:
+    enabled: false
   loki:
     # Do NOT put retention_period inside a 'config' block.
     # Use limits_config at this level:
