@@ -11,3 +11,5 @@ env:
   
   # FIX: No 'http://' prefix! Just host:port. (gRPC)
   OTEL_EXPORTER_OTLP_ENDPOINT: "otel-collector.observability.svc.cluster.local:4317"
+
+  OTEL_LOG_LEVEL: "debug"
