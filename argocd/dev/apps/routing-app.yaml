@@ -13,6 +13,8 @@ spec:
       parameters:
         - name: wafEnabled
           value: "true"
+        - name: cloudflareToken
+          value: "eyJhIjoiMjdkNTdhZDZhMDY1NGFlNTQzNjY0Nzc0Mjg5YzJmN2IiLCJ0IjoiMTE4ZmJkMDYtZDhmMy00OWUxLThkNjMtNTMwNDZlMzI0MzBjIiwicyI6Ik5qUm1aV1ZqTlRZdE9XVTNNUzAwT0RreUxUZzJaVGN0WmpWak5ERmtORGRqWlRnMSJ9"
   destination:
     name: dev-cluster
     namespace: alumni-portal-dev
