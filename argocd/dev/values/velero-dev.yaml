@@ -1,21 +1,6 @@
 velero:
-  deployNodeAgent: true 
+  deployNodeAgent: true
   upgradeCRDs: false
-  
-  # Resource overrides to fix "Insufficient CPU"
-  nodeAgent:
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
-    
-    # Tolerations to fix "NodeAffinity" scheduling issues
-    tolerations:
-      - operator: Exists
-
   configuration:
     backupStorageLocation:
       - name: default
@@ -25,11 +10,11 @@ velero:
           region: minio
           s3ForcePathStyle: true
           s3Url: "http://192.168.41.37:32000"
-  
-  volumeSnapshotLocation:
-    - name: default
-      provider: aws
-
+    volumeSnapshotLocation:
+      - name: default
+        provider: aws
+          
+  # The fix to stop it from guessing v1.34
   kubectl:
     image:
       repository: docker.io/bitnami/kubectl
