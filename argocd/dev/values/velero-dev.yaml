@@ -32,6 +32,8 @@ velero:
     volumeSnapshotLocation:
       - name: default
         provider: aws
+        config:
+          region: minio
           
   kubectl:
     image:
