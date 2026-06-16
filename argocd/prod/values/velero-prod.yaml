@@ -1,4 +1,5 @@
 velero:
+  deployNodeAgent: true
   upgradeCRDs: false
   configuration:
     backupStorageLocation:

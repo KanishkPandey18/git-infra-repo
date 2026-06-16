@@ -1,5 +1,25 @@
 velero:
+  deployNodeAgent: true
   upgradeCRDs: false
+  defaultVolumesToFsBackup: true 
+
+  nodeAgent:
+    # 1. Tolerate the master node security taints
+    tolerations:
+      - operator: Exists
+      
+    # 2. Delete the default rule that blocks master nodes
+    affinity: {}
+    
+    # 3. Shrink the footprint so it fits on your crowded worker node!
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+
   configuration:
     backupStorageLocation:
       - name: default
@@ -12,8 +32,7 @@ velero:
     volumeSnapshotLocation:
       - name: default
         provider: aws
-  
-  # This is the fix to stop it from guessing v1.34
+          
   kubectl:
     image:
       repository: docker.io/bitnami/kubectl
