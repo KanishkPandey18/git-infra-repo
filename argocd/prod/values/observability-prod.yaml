@@ -42,5 +42,5 @@ otel:
       cpu: 1000m
       memory: 1Gi
     requests:
-      cpu: 500m
+      cpu: 50m
       memory: 256Mi
