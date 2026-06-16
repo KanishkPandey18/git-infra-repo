@@ -31,8 +31,8 @@ data:
         endpoint: "alumni-observability-dev-tempo.observability.svc.cluster.local:4317"
         tls:
           insecure: true
-        debug:
-          verbosity: detailed
+      debug:
+        verbosity: detailed
         
     service:
       pipelines:
