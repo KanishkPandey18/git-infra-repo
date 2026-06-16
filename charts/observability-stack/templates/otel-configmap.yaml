@@ -26,10 +26,6 @@ data:
         send_batch_size: 1024
         timeout: 1s
         
-      batch:
-        send_batch_size: 1024
-        timeout: 1s
-        
     exporters:
       tempo:
         endpoint: "alumni-observability-dev-tempo.observability.svc.cluster.local:4317"
