@@ -5,8 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: alumni-backend
-    # THE FIX: This now dynamically reads 'dev' or 'prod'
-    release: {{ .Values.metrics.prometheusRelease }}
+    release: alumni-observability-dev # Links directly to your Prometheus operator instance
 spec:
   selector:
     matchLabels:
