@@ -1,7 +1,12 @@
 image:
   repository: "avitheg/alumni-backend"
-  tag: "v5"
+  tag: "observability-v2"
 
 env:
   NODE_ENV: "production"
   KEYCLOAK_ISSUER: "https://jecrconnect.xyz/auth/realms/application"
+  OTEL_SERVICE_NAME: "alumni-backend"
+  
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector.observability.svc.cluster.local:4318"
+
+  OTEL_LOG_LEVEL: "info"
