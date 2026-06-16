@@ -80,4 +80,7 @@ tempo:
     storageClassName: "local-path"
     size: 10Gi # Reduced from 10Gi for space saving
 otel:
-  endpoint: "alumni-observability-dev-tempo:4318"
+  # The Collector is acting as a "Forwarder".
+  # It is being told: "Take everything you receive, and send it HERE."
+  # Port 4317 is the standard OTLP/gRPC port for Tempo ingestion.
+  endpoint: "http://alumni-observability-dev-tempo:4317"

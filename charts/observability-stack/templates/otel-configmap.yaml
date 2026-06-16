@@ -13,6 +13,7 @@ data:
       otlp:
         protocols:
           grpc: { endpoint: 0.0.0.0:4317 }
+          # backend and istio sidecar will send traces here over HTTP
           http: { endpoint: 0.0.0.0:4318 }
       # zipkin:
       #   endpoint: 0.0.0.0:9411
@@ -30,10 +31,10 @@ data:
     exporters:
       otlp:
         # Dynamically targets the correct Tempo instance for Dev OR Prod
-        endpoint: "{{ .Release.Name }}-tempo.{{ .Release.Namespace }}.svc.cluster.local:4317"
+        endpoint: {{ .Values.otel.endpoint | quote }}
         tls:
           insecure: true
-      debug: # Perfectly aligned with otlp!
+      debug: 
         verbosity: detailed
         
     service:

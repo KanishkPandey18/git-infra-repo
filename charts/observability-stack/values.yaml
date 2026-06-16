@@ -37,15 +37,16 @@ kube-prometheus-stack:
         url: http://alumni-observability-dev-loki:3100
         access: proxy
         jsonData:
-        derivedFields:
-          - name: TraceID
-            matcherRegex: '"traceId":"(\w+)"'
-            datasourceUid: tempo   # Make sure this matches your Tempo UID (usually just 'tempo')
-            url: '$${__value.raw}' # Note the double $$ to escape Helm templating
+          derivedFields:
+            - name: TraceID
+              matcherRegex: '"traceId":"(\w+)"'
+              datasourceUid: tempo   # Make sure this matches your Tempo UID (usually just 'tempo')
+              url: '$${__value.raw}' # Note the double $$ to escape Helm templating
             
       - name: Tempo
         type: tempo
-        url: http://alumni-observability-dev-tempo:3200 
+        uid: tempo                   # Added UID so Loki can find it
+        url: http://alumni-observability-dev-tempo:3100 
 
 # -- Loki (Logs) Configuration
 loki-stack:
@@ -62,7 +63,6 @@ loki-stack:
         - url: http://alumni-observability-dev-loki:3100/loki/api/v1/push
 
 # -- Tempo (Traces) Configuration
-# -- Tempo (Traces) Configuration
 tempo:
   receivers:
     otlp:
@@ -71,7 +71,7 @@ tempo:
           endpoint: "0.0.0.0:4317"
         http:
           endpoint: "0.0.0.0:4318"
-          
+
   storage:
     trace:
       backend: local
