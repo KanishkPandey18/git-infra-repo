@@ -14,8 +14,8 @@ data:
         protocols:
           grpc: { endpoint: 0.0.0.0:4317 }
           http: { endpoint: 0.0.0.0:4318 }
-      zipkin:
-        endpoint: 0.0.0.0:9411
+      # zipkin:
+      #   endpoint: 0.0.0.0:9411
           
     processors:
       memory_limiter:
@@ -27,14 +27,16 @@ data:
         timeout: 1s
         
     exporters:
-      tempo:
+      otlp:
         endpoint: "alumni-observability-dev-tempo.observability.svc.cluster.local:4317"
         tls:
           insecure: true
+        debug:
+          verbosity: detailed
         
     service:
       pipelines:
         traces:
           receivers: [otlp]        #add zipkin here if you want to receive traces from zipkin as well
           processors: [memory_limiter, batch]
-          exporters: [tempo]
+          exporters: [otlp, debug]
