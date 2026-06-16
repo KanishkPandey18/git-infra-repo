@@ -27,3 +27,8 @@ env:
   OTEL_EXPORTER_OTLP_ENDPOINT: ""
 
   OTEL_LOG_LEVEL: ""
+
+metrics:
+  enabled: true
+  # Default to 'dev'. The Production ArgoCD file will override this to 'prod'.
+  prometheusRelease: "alumni-observability-dev"
