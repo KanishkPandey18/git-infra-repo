@@ -1,6 +1,6 @@
 image:
   repository: "avitheg/alumni-backend"
-  tag: "v5"
+  tag: "v6"
 
 env:
   NODE_ENV: "production"
