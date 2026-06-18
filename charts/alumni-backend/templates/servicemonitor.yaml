@@ -5,7 +5,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: alumni-backend
-    release: alumni-observability-dev # Links directly to your Prometheus operator instance
+    # This variable will be provided by your Dev/Prod values.yaml
+    release: {{ .Values.prometheus.release | default "alumni-observability-dev" }}
 spec:
   selector:
     matchLabels:
