@@ -1,6 +1,27 @@
 velero:
   deployNodeAgent: true
   upgradeCRDs: false
+  
+  # 1. Constrain the main Velero server
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # 2. Constrain the Node Agent daemon (Runs on every node)
+  nodeAgent:
+    podVolumePath: /var/lib/kubelet/pods
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
   configuration:
     backupStorageLocation:
       - name: default
