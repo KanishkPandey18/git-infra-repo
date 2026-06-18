@@ -1,5 +1,12 @@
 # argocd/prod/values/observability-prod.yaml
 
+# --- INTEGRATION SETTINGS ---
+# These values are used by the ServiceMonitor templates in charts/backend/
+prometheus:
+  release: "alumni-observability-prod"
+appLabel: "alumni-backend"
+
+# --- INFRASTRUCTURE OVERRIDES ---
 kube-prometheus-stack:
   prometheus:
     prometheusSpec:
