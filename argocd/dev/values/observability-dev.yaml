@@ -1,5 +1,12 @@
 # ALIGNED DEV OBSERVABILITY OVERRIDES VALUE STREAM
 
+# --- INTEGRATION SETTINGS ---
+# These values are used by the ServiceMonitor templates in charts/backend/
+prometheus:
+  release: "alumni-observability-dev"
+appLabel: "alumni-backend"
+
+# --- INFRASTRUCTURE OVERRIDES ---
 kube-prometheus-stack:
   prometheus:
     prometheusSpec:
