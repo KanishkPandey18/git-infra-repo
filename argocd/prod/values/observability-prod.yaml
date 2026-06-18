@@ -1,46 +1,81 @@
-# -- Prometheus Overrides (Metrics)
+# argocd/prod/values/observability-prod.yaml
+
 kube-prometheus-stack:
   prometheus:
     prometheusSpec:
-      # Keep metrics for 15 days instead of 2
-      retention: 15d
+      retention: 2d
+      podMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
       resources:
         requests:
-          memory: 2Gi
+          memory: 512Mi
       storageSpec:
         volumeClaimTemplate:
           spec:
+            storageClassName: "local-path" 
+            accessModes: ["ReadWriteOnce"]
             resources:
               requests:
-                # Scale up physical disk allocation
-                storage: 50Gi
-                
+                storage: 20Gi
+
   grafana:
-    # Consider replacing this with a secure secret reference in the future
-    adminPassword: "admin-production" 
-
-# -- Loki Overrides (Logs)
-loki-stack:
-  loki:
+    adminPassword: "admin-production"
+    enabled: true
+    service:
+      type: LoadBalancer 
+      annotations:
+        metallb.universe.tf/address-pool: local-ip-pool
     persistence:
-      size: 50Gi
+      enabled: true
+      type: pvc
+      storageClassName: "local-path"
+      accessModes:
+        - ReadWriteOnce
+      size: 5Gi 
+      finalizers:
+        - kubernetes.io/pvc-protection
+    
+    additionalDataSources:
+      - name: Loki
+        type: loki
+        url: http://alumni-observability-prod-loki:3100
+        access: proxy
+        jsonData:
+          derivedFields:
+            - name: TraceID
+              matcherRegex: '"traceId":"(\w+)"'
+              datasourceUid: tempo  
+              url: '$${__value.raw}' 
+      - name: Tempo
+        type: tempo
+        uid: tempo                   
+        url: http://alumni-observability-prod-tempo:3100
+
+loki-stack:
+  grafana:
+    enabled: false
+  loki:
+    limits_config:
+      retention_period: 48h
+      reject_old_samples: true
+      reject_old_samples_max_age: 48h
+    persistence:
+      enabled: true
+      storageClassName: "local-path"
+      size: 10Gi
+  promtail:
+    enabled: true 
     config:
-      table_manager:
-        retention_deletes_enabled: true
-        retention_period: 360h # 15 Days
+      clients:
+        - url: http://alumni-observability-prod-loki:3100/loki/api/v1/push
 
-# -- Tempo Overrides (Traces)
 tempo:
+  retention: 48h
   persistence:
-    size: 50Gi
+    enabled: true
+    storageClassName: "local-path"
+    size: 10Gi
 
-# -- OpenTelemetry Collector Overrides
+# OTel Forwarding (Port 4317 is Tempo gRPC)
 otel:
-  # Double the resource limits to prevent OOMKilled errors during heavy load tests
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
-    requests:
-      cpu: 50m
-      memory: 256Mi
+  endpoint: "http://alumni-observability-prod-tempo:4317"
