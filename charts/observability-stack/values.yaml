@@ -30,23 +30,9 @@ kube-prometheus-stack:
       finalizers:
         - kubernetes.io/pvc-protection
         
-    # Generic Short-DNS for Data Sources
-    additionalDataSources:
-      - name: Loki
-        type: loki
-        url: http://alumni-observability-dev-loki:3100
-        access: proxy
-        jsonData:
-          derivedFields:
-            - name: TraceID
-              matcherRegex: '"traceId":"(\w+)"'
-              datasourceUid: tempo   # Make sure this matches your Tempo UID (usually just 'tempo')
-              url: '$${__value.raw}' # Note the double $$ to escape Helm templating
-            
-      - name: Tempo
-        type: tempo
-        uid: tempo                   # Added UID so Loki can find it
-        url: http://alumni-observability-dev-tempo:3100 
+    # We purposefully leave this empty! 
+    # ArgoCD will dynamically inject the Loki and Tempo URLs here.
+    additionalDataSources: [] 
 
 # -- Loki (Logs) Configuration
 loki-stack:
@@ -58,10 +44,10 @@ loki-stack:
   promtail:
     enabled: true 
     config:
-      clients:
-        # Generic Short-DNS for Log Pushing
-        - url: http://alumni-observability-dev-loki:3100/loki/api/v1/push
-
+      # We purposefully leave this empty!
+      # ArgoCD will dynamically inject the Loki push URL here.
+      clients: []
+      
 # -- Tempo (Traces) Configuration
 tempo:
   receivers:
