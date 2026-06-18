@@ -26,7 +26,7 @@ kube-prometheus-stack:
       storageClassName: "local-path"
       accessModes:
         - ReadWriteOnce
-      size: 5Gi
+      size: 10Gi
       finalizers:
         - kubernetes.io/pvc-protection
         
