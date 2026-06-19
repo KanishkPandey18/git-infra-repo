@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "alumni-backend.fullname" . }}-sla-rules
+  # This deploys the rule into the backend's namespace
+  namespace: {{ .Release.Namespace }}
+  labels:
+    # Crucial: This links it to the Prometheus Operator watching the cluster
+    release: {{ .Values.prometheus.release | default "alumni-observability-dev" }}
+spec:
+  groups:
+  - name: backend.slas
+    rules:
+    - alert: BackendMemorySLABreach
+      # Updated with the correct alumni-portal-dev namespace
+      expr: sum(container_memory_working_set_bytes{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}) / 1024 / 1024 > 250
+      for: 1m
+      labels:
+        severity: critical
+        routing_key: pagerduty 
+      annotations:
+        summary: "SLA Breach: Backend memory usage is critical"
+        description: "The backend application memory in alumni-portal-dev has exceeded 250MB for over 1 minute."
