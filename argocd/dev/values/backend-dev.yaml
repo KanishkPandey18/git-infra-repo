@@ -13,6 +13,5 @@ env:
   OTEL_LOG_LEVEL: "info"
 
   # NODE_OPTIONS: "--require ./src/telemetry.js"
-
-  prometheus:
-  release: alumni-observability-dev
+prometheus:
+ release: alumni-observability-dev
