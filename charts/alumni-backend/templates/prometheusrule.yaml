@@ -1,7 +1,8 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ include "alumni-backend.fullname" . }}-sla-rules
+  # FIX: Replaced the missing "fullname" function with a native Helm variable
+  name: {{ .Release.Name }}-backend-sla-rules
   # This deploys the rule into the backend's namespace
   namespace: {{ .Release.Namespace }}
   labels:
