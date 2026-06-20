@@ -12,3 +12,6 @@ env:
   # This makes the traces show up clearly labeled in the Grafana/Tempo UI
   OTEL_SERVICE_NAME: "alumni-backend-prod"
 
+prometheus:
+ release: alumni-observability-prod
+
