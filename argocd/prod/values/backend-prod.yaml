@@ -1,6 +1,6 @@
 image:
   repository: "avitheg/alumni-backend"
-  tag: "v6"
+  tag: "observability-v2"
 
 env:
   NODE_ENV: "production"
