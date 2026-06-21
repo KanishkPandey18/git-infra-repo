@@ -52,7 +52,21 @@ resource "helm_release" "istiod" {
   version    = "1.20.0"
   namespace  = "istio-system"
 
-  # --- TRACING CONFIGURATION START ---
+  # Resource allocations from file 1
+  values = [
+    yamlencode({
+      pilot = {
+        resources = {
+          requests = {
+            cpu    = "50m"
+            memory = "256Mi"
+          }
+        }
+      }
+    })
+  ]
+
+  # --- TRACING CONFIGURATION START --- (from file 2)
   set {
     name  = "meshConfig.enableTracing"
     value = "true"
