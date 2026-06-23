@@ -9,6 +9,11 @@ kube-prometheus-stack:
       kubeProxy: false
       # -----------------------
   prometheus:
+  # ADD THIS SERVICE BLOCK:
+    service:
+      type: LoadBalancer
+      annotations:
+        metallb.universe.tf/address-pool: local-ip-pool
     prometheusSpec:
       podMonitorSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
