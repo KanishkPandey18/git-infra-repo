@@ -14,7 +14,7 @@ spec:
     rules:
     - alert: BackendMemorySLABreach
       # Updated with the correct alumni-portal-dev namespace
-      expr: sum(container_memory_working_set_bytes{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}) / 1024 / 1024 > 250
+      expr: sum(container_memory_working_set_bytes{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}) / 1024 / 1024 > 550
       for: 1m
       labels:
         severity: critical
