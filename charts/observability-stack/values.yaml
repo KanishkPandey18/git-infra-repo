@@ -1,5 +1,13 @@
 # -- Prometheus & Grafana Configuration
 kube-prometheus-stack:
+  # Add this block to disable the noisy control-plane default rules
+  defaultRules:
+    rules:
+      kubeScheduler: false
+      kubeControllerManager: false
+      etcd: false
+      kubeProxy: false
+      # -----------------------
   prometheus:
     prometheusSpec:
       podMonitorSelectorNilUsesHelmValues: false
