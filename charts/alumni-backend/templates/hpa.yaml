@@ -2,15 +2,15 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "alumni-backend.fullname" . }}
+  name: {{ .Release.Name }}-backend
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "alumni-backend.labels" . | nindent 4 }}
+    app: alumni-backend
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "alumni-backend.fullname" . }}
+    name: {{ .Release.Name }}-backend
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
