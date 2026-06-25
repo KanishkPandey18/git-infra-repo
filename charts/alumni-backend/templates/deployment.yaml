@@ -5,7 +5,9 @@ metadata:
   labels:
     app: alumni-backend
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: 1
+  {{- end }}
   selector:
     matchLabels:
       app: alumni-backend
