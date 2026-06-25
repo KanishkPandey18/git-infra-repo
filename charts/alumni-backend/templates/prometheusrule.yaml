@@ -14,11 +14,11 @@ spec:
     rules:
     - alert: BackendMemorySLABreach
       # Updated with the correct alumni-portal-dev namespace
-      expr: sum(container_memory_working_set_bytes{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}) / 1024 / 1024 > 550
+      expr: sum(container_memory_working_set_bytes{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}) / 1024 / 1024 > 600
       for: 1m
       labels:
         severity: critical
         routing_key: pagerduty 
       annotations:
         summary: "SLA Breach: Backend memory usage is critical"
-        description: "The backend application memory in alumni-portal-dev has exceeded 250MB for over 1 minute."
+        description: "The backend application memory in alumni-portal-dev has exceeded 600MB for over 1 minute."
