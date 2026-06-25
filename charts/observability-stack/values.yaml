@@ -1,13 +1,24 @@
 # -- Prometheus & Grafana Configuration
 kube-prometheus-stack:
-  # Add this block to disable the noisy control-plane default rules
+  # 1. Stop trying to scrape the secure control plane components
+  kubeControllerManager:
+    enabled: false
+  kubeEtcd:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  kubeProxy:
+    enabled: false
+
+  # 2. Keep the good default rules, but disable the ones for the components above
   defaultRules:
+    create: true
     rules:
-      kubeScheduler: false
       kubeControllerManager: false
+      kubeScheduler: false
       etcd: false
       kubeProxy: false
-      # -----------------------
+
   prometheus:
   # ADD THIS SERVICE BLOCK:
     service:
@@ -80,6 +91,7 @@ tempo:
     enabled: true
     storageClassName: "local-path"
     size: 10Gi
+    
 # -- Custom OpenTelemetry Collector Settings
 otel:
   image:
