@@ -1,3 +1,29 @@
+# 💥 THE GLOBAL BRAIN INJECTION 💥
+  alertmanager:
+    config:
+      route:
+        group_by: ['alertname', 'severity']
+        group_wait: 5s 
+        group_interval: 1m
+        repeat_interval: 1h
+        receiver: 'notification-api'
+        routes:
+          - matchers:
+              - alertname="PrometheusRuleFailures"
+            receiver: 'blackhole'
+          - matchers:
+              - alertname="Watchdog"
+            receiver: 'blackhole'
+          - matchers:
+              - severity="critical"
+            receiver: 'notification-api'
+      receivers:
+        - name: 'blackhole'
+        - name: 'notification-api'
+          webhook_configs:
+            - url: 'http://alumni-notification-api-service.alumni-portal-dev.svc.cluster.local:3000/api/v1/notify'
+              send_resolved: true
+
 # -- Prometheus & Grafana Configuration
 kube-prometheus-stack:
   # 1. Stop trying to scrape the secure control plane components
