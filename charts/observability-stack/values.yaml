@@ -1,4 +1,6 @@
-# 💥 THE GLOBAL BRAIN INJECTION 💥
+# -- Prometheus & Grafana Configuration
+kube-prometheus-stack:
+  # 💥 THE GLOBAL BRAIN INJECTION 💥
   alertmanager:
     config:
       route:
@@ -24,8 +26,6 @@
             - url: 'http://alumni-notification-api-service.alumni-portal-dev.svc.cluster.local:3000/api/v1/notify'
               send_resolved: true
 
-# -- Prometheus & Grafana Configuration
-kube-prometheus-stack:
   # 1. Stop trying to scrape the secure control plane components
   kubeControllerManager:
     enabled: false
@@ -46,7 +46,6 @@ kube-prometheus-stack:
       kubeProxy: false
 
   prometheus:
-  # ADD THIS SERVICE BLOCK:
     service:
       type: LoadBalancer
       annotations:
@@ -80,8 +79,6 @@ kube-prometheus-stack:
       finalizers:
         - kubernetes.io/pvc-protection
         
-    # We purposefully leave this empty! 
-    # ArgoCD will dynamically inject the Loki and Tempo URLs here.
     additionalDataSources: [] 
 
 # -- Loki (Logs) Configuration
@@ -94,8 +91,6 @@ loki-stack:
   promtail:
     enabled: true 
     config:
-      # We purposefully leave this empty!
-      # ArgoCD will dynamically inject the Loki push URL here.
       clients: []
       
 # -- Tempo (Traces) Configuration
