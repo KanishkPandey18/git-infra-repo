@@ -21,6 +21,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["node", "workers/incidentWorker.js"]
+          #ADDED TO LOAD THE SECRETS
+          envFrom:
+            - secretRef:
+                name: {{ .Values.env.secretName }}
+
           env:
             # --- Dynamic Cluster Routing URL ---
             - name: KAFKA_BROKER
