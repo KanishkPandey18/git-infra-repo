@@ -2,28 +2,38 @@ apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
   name: global-webhook-config
-  # This must live in the same namespace as your observability stack
   namespace: {{ .Release.Namespace }}
   labels:
-    # Crucial: Links it to the Alertmanager operator
     release: {{ .Release.Name }}
 spec:
   route:
     receiver: 'notification-api'
     groupBy: ['alertname', 'severity']
-    # How long to wait to bundle alerts together before sending
     groupWait: 30s 
-    # How long to wait before sending updates about the same group
     groupInterval: 5m 
-    # How long to wait before re-sending a persistent alert
     repeatInterval: 1h 
     routes:
+      # --- THE FOOLPROOF GATEKEEPER ---
+      # Intercept noisy system alerts and drop them into the void
+      - match:
+          alertname: PrometheusRuleFailures
+        receiver: 'blackhole'
+      - match:
+          alertname: Watchdog
+        receiver: 'blackhole'
+      # --------------------------------
+      
+      # Route all other legitimate critical alerts to your microservice
       - match:
           severity: critical
         receiver: 'notification-api'
+        
   receivers:
   - name: 'notification-api'
     webhookConfigs:
-    # IMPORTANT: Update this URL to match the exact internal DNS of your Notification API service
     - url: 'http://alumni-notification-api-service.alumni-portal-dev.svc.cluster.local:3000/api/v1/notify'
       sendResolved: true
+      
+  # --- THE VOID ---
+  # A receiver with no webhook attached. It silently drops the alert.
+  - name: 'blackhole'
