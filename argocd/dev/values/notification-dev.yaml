@@ -1,6 +1,6 @@
 image:
   repository: "192.168.41.90:8082/alumni-notification"
-  tag: "v2"
+  tag: "v4"
 
 env:
   # Strictly isolated to the Dev cluster namespace
