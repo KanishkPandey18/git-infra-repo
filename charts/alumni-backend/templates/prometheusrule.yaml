@@ -10,15 +10,16 @@ spec:
   - name: backend.slas
     rules:
     # 1. Memory SLA (Existing)
+    # 1. Corrected Memory SLA: Evaluates per-pod
     - alert: BackendMemorySLABreach
-      expr: sum(container_memory_working_set_bytes{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}) / 1024 / 1024 > 600
+      expr: sum by (pod) (container_memory_working_set_bytes{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}) / 1024 / 1024 > 600
       for: 1m
       labels:
         severity: critical
         routing_key: pagerduty 
       annotations:
         summary: "SLA Breach: Backend memory usage is critical"
-        description: "The backend application memory in alumni-portal-dev has exceeded 600MB for over 1 minute."
+        description: "Pod {{ $labels.pod }} has exceeded 600MB for over 1 minute."
 
     # 2. High Error Rate SLA (5xx > 5%)
     - alert: BackendHighErrorRate
@@ -45,13 +46,13 @@ spec:
         summary: "SLA Warning: High Latency"
         description: "95th percentile latency is above 1.5s for 2 minutes."
 
-    # 4. Crash Loop SLA (> 3 restarts in 10m)
+    # 4. Corrected Crash Loop SLA: Uses mathematical increase
     - alert: BackendCrashLooping
-      expr: changes(kube_pod_container_status_restarts_total{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}[10m]) > 3
+      expr: increase(kube_pod_container_status_restarts_total{namespace="alumni-portal-dev", pod=~"alumni-backend.*"}[10m]) > 3
       for: 0m
       labels:
         severity: critical
         routing_key: pagerduty
       annotations:
         summary: "SLA Breach: CrashLoopDetected"
-        description: "Backend pod has restarted more than 3 times in 10 minutes."
+        description: "Pod {{ $labels.pod }} has restarted more than 3 times in 10 minutes."
