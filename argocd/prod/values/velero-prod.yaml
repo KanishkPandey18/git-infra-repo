@@ -40,3 +40,13 @@ velero:
     image:
       repository: docker.io/bitnami/kubectl
       tag: "1.30.0"
+
+  # 3. NEW: The 4:15 PM Automated Schedule (Track 1)
+  schedules:
+    prod-state-backup:
+      disabled: false
+      schedule: "35 16 * * *" # Triggers at exactly 4:35 PM
+      template:
+        ttl: "168h" # Automatically deletes old backups after 7 days
+        includedNamespaces:
+          - '*'
