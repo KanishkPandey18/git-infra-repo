@@ -19,7 +19,7 @@ spec:
         routing_key: pagerduty 
       annotations:
         summary: "SLA Breach: Backend memory usage is critical"
-        description: "Pod {{ $labels.pod }} has exceeded 600MB for over 1 minute."
+        description: "The backend application memory in alumni-portal-dev has exceeded 600MB for over 1 minute."
 
     # 2. High Error Rate SLA (5xx > 5%)
     - alert: BackendHighErrorRate
@@ -55,4 +55,4 @@ spec:
         routing_key: pagerduty
       annotations:
         summary: "SLA Breach: CrashLoopDetected"
-        description: "Pod {{ $labels.pod }} has restarted more than 3 times in 10 minutes."
+        description: "Backend pod has restarted more than 3 times in 10 minutes."
