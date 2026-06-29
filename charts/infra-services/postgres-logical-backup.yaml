@@ -41,6 +41,6 @@ spec:
               - name: POSTGRES_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: postgres-secrets
+                    name: alumni-secrets
                     key: POSTGRES_PASSWORD
           restartPolicy: OnFailure
