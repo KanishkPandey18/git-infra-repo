@@ -24,7 +24,7 @@ spec:
     # 2. High Error Rate SLA (5xx > 5%)
     - alert: BackendHighErrorRate
       expr: |
-        sum(rate(http_requests_total{namespace="alumni-portal-dev", status=~"5.."}[2m])) 
+        sum(rate(http_requests_total{namespace="alumni-portal-dev", status=~"4.."}[2m])) 
         / sum(rate(http_requests_total{namespace="alumni-portal-dev"}[2m])) > 0.05
       for: 1m
       labels:
