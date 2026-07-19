@@ -11,8 +11,6 @@ service:
   targetPort: 3000
 
 env:
-  # --- Shared Configurations ---
+  # kafkaBrokers: "alumni-kafka:9092"
+  KAFKA_BROKER: "kafka:9092"
   secretName: "alumni-secrets"
-
-  # --- Placeholders for ArgoCD Overrides ---
-  KAFKA_BROKER: ""

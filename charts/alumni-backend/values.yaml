@@ -8,30 +8,21 @@ service:
   targetPort: 8000
 
 env:
-  # --- Shared Configurations ---
-  NODE_ENV: "production"  # Locked in for both clusters for Node.js performance
+  NODE_ENV: "production"
+  # Cleaned internal DNS references
   KEYCLOAK_JWKS_URI: "http://keycloak-service:8080/auth/realms/application/protocol/openid-connect/certs"
   KEYCLOAK_INTERNAL_URL: "http://keycloak-service:8080"
   NOTIFICATION_SERVICE_URL: "http://alumni-notification-api-service:3000"
   MONGO_URI: "mongodb://admin:adminpassword@mongo-service:27017/alumni?authSource=admin"
+  
   KEYCLOAK_REALM: "application"
   KEYCLOAK_CLIENT_ID: "backend-client"
   secretName: "alumni-secrets"
   KEYCLOAK_ADMIN: "admin"
   KEYCLOAK_ADMIN_PASSWORD: "admin"
 
-  # --- Placeholders for ArgoCD Overrides ---
-  KEYCLOAK_ISSUER: ""
-
-  OTEL_SERVICE_NAME: ""
-  OTEL_EXPORTER_OTLP_ENDPOINT: ""
-
-  OTEL_LOG_LEVEL: ""
-
-autoscaling:
-  enabled: true
-  minReplicas: 1
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 60
-
-
+  # NOTE ON THIS ISSUER URL:
+  # This must remain the PUBLIC URL that your frontend uses. 
+  # In production, change this IP to your actual domain name (e.g., https://alumni.jecrc.xyz/auth/realms/application)
+  KEYCLOAK_ISSUER: "https://192.168.41.88/auth/realms/application"
+  
